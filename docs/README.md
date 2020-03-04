@@ -1,6 +1,6 @@
 # Octodns Action
 
-This action runs github/octodns to deploy your octodns config.
+This action runs [**github/octodns**](https://github.com/github/octodns) to deploy your octodns config.
 
 ## Inputs
 
@@ -29,7 +29,7 @@ Default `"dns/public.yaml"`.
 
 **Optional** List packages required by octodns for your DNS providers. Check [the list of supported providers](https://github.com/github/octodns#supported-providers) to find requirements for yours.
 
-Default `""`.
+Default `""` (empty string).
 
 ### `fork-name`
 
@@ -37,7 +37,7 @@ Default `""`.
 
 Default `"github/octodns"`.
 
-### `release`
+### `release-tag`
 
 **Not implemented** Tag marking the release of the octodns code you'd like to run.
 
@@ -65,12 +65,13 @@ jobs:
     name: Publish DNS config from master
     runs-on: ubuntu-latest
     steps:
+      - uses: actions:checkout@v2
       - name: Publish
-        uses: solvaholic/octodns-action@v0
+        uses: solvaholic/octodns-action@master
         with:
-          config-path: dns/public.yaml
+          config-path: dns/config/public.yaml
           pip-extras: boto3
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.route53-aws-key-id }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.route53-aws-secret-access-key }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.route53_aws_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.route53_aws_secret_access_key }}
 ```
