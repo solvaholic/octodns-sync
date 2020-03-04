@@ -65,7 +65,7 @@ jobs:
     name: Publish DNS config from master
     runs-on: ubuntu-latest
     steps:
-      - uses: actions:checkout@v2
+      - uses: actions/checkout@v2
       - name: Publish
         uses: solvaholic/octodns-action@master
         with:
