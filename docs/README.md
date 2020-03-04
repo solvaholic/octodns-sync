@@ -31,6 +31,12 @@ Default `"dns/public.yaml"`.
 
 Default `""` (empty string).
 
+### `doit`
+
+**Optional** Really do it? Set `yes` to do it; Set `no` or `""` (empty string) to not do it.
+
+Default `""`.
+
 ### `fork-name`
 
 **Not implemented** Name of the GitHub repository containing the octodns code you'd like to run.
@@ -71,6 +77,7 @@ jobs:
         with:
           config_path: dns/config/public.yaml
           pip_extras: boto3
+          doit: yes
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.route53_aws_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.route53_aws_secret_access_key }}

@@ -12,6 +12,7 @@
 # Parse arguments.
 CONFIG_PATH="${GITHUB_WORKSPACE}/$1"
 PIP_EXTRAS="$2"
+DOIT="$3"
 
 # Change to config directory, so relative paths will work.
 cd "$(dirname "${CONFIG_PATH}")"
@@ -25,6 +26,10 @@ cd "$(dirname "${CONFIG_PATH}")"
 echo "PIP_EXTRAS: ${PIP_EXTRAS}"
 if [ -n "${PIP_EXTRAS}" ]; then pip install $2; fi
 
-# Run octodns in test mode.
+# Run octodns.
 echo "CONFIG_PATH: ${CONFIG_PATH}"
-octodns-sync --config-file="${CONFIG_PATH}"
+if [ "${DOIT}" = "yes" ]; then
+  octodns-sync --config-file="${CONFIG_PATH}" --doit
+else
+  octodns-sync --config-file="${CONFIG_PATH}"
+fi
