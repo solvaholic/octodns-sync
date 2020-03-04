@@ -69,9 +69,20 @@ jobs:
       - name: Publish
         uses: solvaholic/octodns-action@master
         with:
-          config-path: dns/config/public.yaml
-          pip-extras: boto3
+          config_path: dns/config/public.yaml
+          pip_extras: boto3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.route53_aws_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.route53_aws_secret_access_key }}
+```
+
+# Run locally
+
+Notice this example uses `wslpath -a`. If you're not running this in Linux in WSL in Windows, you'll probably use `realpath` or so.
+
+```
+_config_path=dns/config/public.yaml   # Path relative to /
+_pip_extras=boto3                     # Additional packages your DNS provider requires
+_env_path=dns/.env                    # .env file with secret keys and stuff
+docker run --rm -v "$(wslpath -a ./dns)":/dns --env-file ${_env_path} octodns-action:latest ${_config_path} ${_pip_extras}
 ```
