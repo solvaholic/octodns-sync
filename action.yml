@@ -3,11 +3,11 @@
 name: 'Octodns'
 description: 'Run github/octodns, or a fork of your choice, to deploy your octodns config.'
 inputs:
-  config-path:
+  config_path:
     description: 'Path, relative to your repository root, of the config file you would like to octodns to use.'
     required: false
     default: 'dns/public.yaml'
-  pip-extras:
+  pip_extras:
     description: 'List packages required by octodns for your DNS providers. Check the list of supported providers to find requirements for yours.'
     required: false
     default: ''
@@ -16,5 +16,5 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.config-path }}
-    - ${{ inputs.pip-extras }}
+    - ${{ inputs.config_path }}
+    - ${{ inputs.pip_extras }}
