@@ -1,6 +1,6 @@
 # Run octodns with your config.
 
-FROM python:3-slim
+FROM python:2-slim
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
