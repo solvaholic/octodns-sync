@@ -84,7 +84,7 @@ jobs:
           doit: --doit
 ```
 
-# Run locally
+## Run locally
 
 Notice this example uses `wslpath -a`. If you're not running this in Linux in WSL in Windows, you'll probably use `realpath` or so.
 
