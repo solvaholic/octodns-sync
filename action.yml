@@ -12,7 +12,7 @@ inputs:
     required: false
     default: ''
   doit:
-    description: 'Really do it? Set "yes" to do it; Set "no" or "" (empty string) to not do it.'
+    description: 'Really do it? Set "--doit" to do it; Any other string to not do it.'
     required: false
     default: ''
 

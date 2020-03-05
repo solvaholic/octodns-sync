@@ -28,7 +28,7 @@ if [ -n "${PIP_EXTRAS}" ]; then pip install $2; fi
 
 # Run octodns.
 echo "CONFIG_PATH: ${CONFIG_PATH}"
-if [ "${DOIT}" = "yes" ]; then
+if [ "${DOIT}" = "--doit" ]; then
   octodns-sync --config-file="${CONFIG_PATH}" --doit
 else
   octodns-sync --config-file="${CONFIG_PATH}"
