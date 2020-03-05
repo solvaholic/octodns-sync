@@ -2,6 +2,10 @@
 
 This action runs [**github/octodns**](https://github.com/github/octodns) to deploy your octodns config.
 
+**github/octodns** allows you to manage your DNS records in a provider-agnostic format and test and publish changes with many different DNS providers. It is extensible and customizable.
+
+When you manage your octodns configuration in a GitHub repository, this [GitHub Action](https://help.github.com/actions/getting-started-with-github-actions/about-github-actions) allows you to test and publish your changes automatically in a [workflow](https://help.github.com/actions/configuring-and-managing-workflows) you define.
+
 ## Inputs
 
 ### Secrets
@@ -11,7 +15,7 @@ This action runs [**github/octodns**](https://github.com/github/octodns) to depl
     "route53-aws-key-id": "YOURIDGOESHERE"
     "route53-aws-secret-access-key": "YOURKEYGOESHERE"
 
-Then include them in `env` in your workflow:
+Then include them as environment variables in your workflow. For example:
 
 ```
 env:
@@ -77,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Publish
-        uses: solvaholic/octodns-action@master
+        uses: solvaholic/octodns-action@v1
         with:
           config_path: dns/config/public.yaml
           pip_extras: boto3
@@ -89,8 +93,16 @@ jobs:
 Notice this example uses `wslpath -a`. If you're not running this in Linux in WSL in Windows, you'll probably use `realpath` or so.
 
 ```
-_config_path=dns/config/public.yaml   # Path relative to repository root
+_image=docker.pkg.github.com/solvaholic/octodns-action:latest
+_config_path=dns/config/public.yaml   # Path relative to where you mount your config
 _pip_extras=boto3                     # Additional packages your DNS provider requires
 _env_path=dns/.env                    # .env file with secret keys and stuff
-docker run --rm -v "$(wslpath -a ./dns)":/dns --env-file ${_env_path} octodns-action:latest ${_config_path} ${_pip_extras}
+_volume="$(wslpath -a ./dns)"
+_mountpoint=/dns
+
+# Test changes:
+docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path} ${_pip_extras}
+
+# Really do it:
+docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path} ${_pip_extras} --doit
 ```
