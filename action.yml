@@ -1,6 +1,6 @@
 # action.yml
 # https://help.github.com/en/actions/building-actions/metadata-syntax-for-github-actions
-name: 'Octodns'
+name: 'octodns-action'
 description: 'Run github/octodns, or a fork of your choice, to deploy your octodns config.'
 inputs:
   config_path:
