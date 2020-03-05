@@ -94,11 +94,11 @@ Notice this example uses `wslpath -a`. If you're not running this in Linux in WS
 
 ```
 _image=docker.pkg.github.com/solvaholic/octodns-action:latest
-_config_path=dns/config/public.yaml   # Path relative to where you mount your config
+_config_path=dns/config/public.yaml   # Path to your config, from inside the container
 _pip_extras=boto3                     # Additional packages your DNS provider requires
 _env_path=dns/.env                    # .env file with secret keys and stuff
-_volume="$(wslpath -a ./dns)"
-_mountpoint=/dns
+_volume="$(wslpath -a ./dns)"         # Path Docker will mount at $_mountpoint
+_mountpoint=/dns                      # Mountpoint for your config directory
 
 # Test changes:
 docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path} ${_pip_extras}
