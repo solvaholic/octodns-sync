@@ -21,19 +21,19 @@ env:
 
 ### `config-path`
 
-**Required** Path, relative to your repository root, of the config file you'd like octodns to use.
+**Required** Path, relative to your repository root, of the config file you would like octodns to use.
 
 Default `"dns/public.yaml"`.
 
 ### `pip-extras`
 
-**Optional** List packages required by octodns for your DNS providers. Check [the list of supported providers](https://github.com/github/octodns#supported-providers) to find requirements for yours.
+**Optional** List packages required by octodns for your DNS providers. Check the list of supported providers to find requirements for yours.
 
 Default `""` (empty string).
 
 ### `doit`
 
-**Optional** Really do it? Set `yes` to do it; Set `no` or `""` (empty string) to not do it.
+**Optional** Really do it? Set "--doit" to do it; Any other string to not do it.
 
 Default `""`.
 
@@ -64,7 +64,7 @@ on:
     branches:
       - master
     paths:
-      - 'dns/*'
+      - 'dns/**'
 
 jobs:
   publish:
@@ -77,7 +77,7 @@ jobs:
         with:
           config_path: dns/config/public.yaml
           pip_extras: boto3
-          doit: yes
+          doit: --doit
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.route53_aws_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.route53_aws_secret_access_key }}
@@ -88,7 +88,7 @@ jobs:
 Notice this example uses `wslpath -a`. If you're not running this in Linux in WSL in Windows, you'll probably use `realpath` or so.
 
 ```
-_config_path=dns/config/public.yaml   # Path relative to /
+_config_path=dns/config/public.yaml   # Path relative to repository root
 _pip_extras=boto3                     # Additional packages your DNS provider requires
 _env_path=dns/.env                    # .env file with secret keys and stuff
 docker run --rm -v "$(wslpath -a ./dns)":/dns --env-file ${_env_path} octodns-action:latest ${_config_path} ${_pip_extras}

@@ -24,7 +24,7 @@ cd "$(dirname "${CONFIG_PATH}")"
 
 # Install PIP_EXTRAS.
 echo "PIP_EXTRAS: ${PIP_EXTRAS}"
-if [ -n "${PIP_EXTRAS}" ]; then pip install $2; fi
+if [ -n "${PIP_EXTRAS}" ]; then pip install ${PIP_EXTRAS}; fi
 
 # Run octodns.
 echo "CONFIG_PATH: ${CONFIG_PATH}"

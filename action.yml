@@ -22,3 +22,4 @@ runs:
   args:
     - ${{ inputs.config_path }}
     - ${{ inputs.pip_extras }}
+    - ${{ inputs.doit }}
