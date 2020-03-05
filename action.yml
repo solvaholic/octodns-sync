@@ -23,3 +23,7 @@ runs:
     - ${{ inputs.config_path }}
     - ${{ inputs.pip_extras }}
     - ${{ inputs.doit }}
+
+branding:
+  icon: 'list'
+  color: 'purple'
