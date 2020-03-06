@@ -1,16 +1,16 @@
 # Octodns Action
 
-This action runs [**github/octodns**](https://github.com/github/octodns) to deploy your octodns config.
+This action runs [**github/octodns**](https://github.com/github/octodns) to deploy your DNS config.
 
-**github/octodns** allows you to manage your DNS records in a provider-agnostic format and test and publish changes with many different DNS providers. It is extensible and customizable.
+**octodns** allows you to manage your DNS records in a provider-agnostic format and test and publish changes with many different DNS providers. It is extensible and customizable.
 
-When you manage your octodns configuration in a GitHub repository, this [GitHub Action](https://help.github.com/actions/getting-started-with-github-actions/about-github-actions) allows you to test and publish your changes automatically in a [workflow](https://help.github.com/actions/configuring-and-managing-workflows) you define.
+When you manage your **octodns** DNS configuration in a GitHub repository, this [GitHub Action](https://help.github.com/actions/getting-started-with-github-actions/about-github-actions) allows you to test and publish your changes automatically using a [workflow](https://help.github.com/actions/configuring-and-managing-workflows) you define.
 
 ## Inputs
 
 ### Secrets
 
-**Required** To authenticate with your DNS provider, this action uses [encrypted secrets](https://help.github.com/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#about-encrypted-secrets) you've configured on your repository. For example if you use Amazon Route53 then [create these secrets](https://help.github.com/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) on the repository where you store your octodns config:
+(**Required**) To authenticate with your DNS provider, this action uses [encrypted secrets](https://help.github.com/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#about-encrypted-secrets) you've configured on your repository. For example if you use Amazon Route53 then [create these secrets](https://help.github.com/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) on the repository where you store your octodns config:
 
     "route53-aws-key-id": "YOURIDGOESHERE"
     "route53-aws-secret-access-key": "YOURKEYGOESHERE"
@@ -25,31 +25,31 @@ env:
 
 ### `config-path`
 
-**Required** Path, relative to your repository root, of the config file you would like octodns to use.
+(**Required**) Path, relative to your repository root, of the config file you would like octodns to use.
 
 Default `"dns/public.yaml"`.
 
 ### `pip-extras`
 
-**Optional** List packages required by octodns for your DNS providers. Check the list of supported providers to find requirements for yours.
+(**Optional**) List packages required by octodns for your DNS providers. Check the list of supported providers to find requirements for yours.
 
 Default `""` (empty string).
 
 ### `doit`
 
-**Optional** Really do it? Set "--doit" to do it; Any other string to not do it.
+(**Optional**) Really do it? Set "--doit" to do it; Any other string to not do it.
 
 Default `""`.
 
 ### `fork-name`
 
-**Not implemented** Name of the GitHub repository containing the octodns code you'd like to run.
+(**Not implemented**) Name of the GitHub repository containing the octodns code you'd like to run.
 
 Default `"github/octodns"`.
 
 ### `release-tag`
 
-**Not implemented** Tag marking the release of the octodns code you'd like to run.
+(**Not implemented**) Tag marking the release of the octodns code you'd like to run.
 
 Default `"v0.9.9"`.
 
