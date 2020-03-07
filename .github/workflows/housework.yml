@@ -23,12 +23,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        _repo=${{ github.repository }}
-        _api=https://api.github.com
-        _tag_name="${{ github.event.release.tag_name }}"
-        _tag_sha=$(curl -sL -H "Authorization: token ${GITHUB_TOKEN} \
-          "${_api}/repos/${_repo}/git/ref/tags/${_tag_name}" | \
-          jq -r .object.sha)"
-        curl -sL -XPATCH -H "Authorization: token ${GITHUB_TOKEN}" \
-          -d "{\"sha\": \"${_tag_sha}\"}" \
-          "${_api}/repos/${_repo}/git/refs/tags/${_tag_name%%.*}"
+        echo event, action: ${{ github.event_name }}, ${{ github.event.action }}
+        echo tag_name: ${{ github.event.release.tag_name }}
