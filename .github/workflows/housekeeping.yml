@@ -2,8 +2,7 @@
 
 name: Housekeeping
 
-on:
-  release:
+on: [ release ]
 
 # A workflow run is made up of 1+ jobs that can run sequentially or in parallel
 # Steps represent a sequence of tasks that will be executed as part of a job
@@ -11,9 +10,7 @@ on:
 jobs:
   bumptag:
     runs-on: ubuntu-latest
-
-    steps:
-    - name: Run a multi-line script
-      run: |
-        echo "{{ github.event_name }} {{ github.event.action }}"
-        echo "{{ github.event.tag_name }}"
+      - name: Run a multi-line script
+        run: |
+          echo event, action: ${{ github.event_name }}, ${{ github.event.action }}
+          echo tag_name: ${{ github.event.tag_name }}
