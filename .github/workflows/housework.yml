@@ -1,6 +1,5 @@
 # Perform general housekeeping tasks for this repo.
 
-name: Housekeeping
 
 on:
   release:
