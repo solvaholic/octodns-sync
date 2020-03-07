@@ -2,7 +2,9 @@
 
 name: Housekeeping
 
-on: [ release ]
+on:
+  release:
+    types: [published]
 
 # A workflow run is made up of 1+ jobs that can run sequentially or in parallel
 # Steps represent a sequence of tasks that will be executed as part of a job
