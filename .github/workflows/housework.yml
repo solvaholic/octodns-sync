@@ -28,7 +28,7 @@ jobs:
         _tag_sha: ${{ github.sha }}
       run: |
         echo _tag_sha: ${_tag_sha}
-        _tag_sha=$(curl -sL -H "Authorization: token ${GITHUB_TOKEN} \
-          "${_api}/repos/${_repo}/git/ref/tags/${_tag_name}" | \
-          jq -r .object.sha)"
-        echo _tag_sha: ${_tag_sha}
+        _a="Authorization: token ${GITHUB_TOKEN}"
+        _b="{\"sha\": \"${_tag_sha}\"}"
+        _c="${_api}/repos/${_repo}/git/refs/tags/${_tag_name%%.*}"
+        curl -sL -XPATCH -H "${_a}" -d "${_b}" "${_c}"
