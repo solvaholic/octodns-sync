@@ -10,7 +10,10 @@ on: [ release ]
 jobs:
   bumptag:
     runs-on: ubuntu-latest
-      - name: Run a multi-line script
-        run: |
-          echo event, action: ${{ github.event_name }}, ${{ github.event.action }}
-          echo tag_name: ${{ github.event.tag_name }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run a multi-line script
+      run: |
+        echo event, action: ${{ github.event_name }}, ${{ github.event.action }}
+        echo tag_name: ${{ github.event.tag_name }}
