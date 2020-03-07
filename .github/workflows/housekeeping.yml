@@ -23,3 +23,4 @@ jobs:
       run: |
         echo event, action: ${{ github.event_name }}, ${{ github.event.action }}
         echo tag_name: ${{ github.event.release.tag_name }}
+        echo github_ref: ${{ github.ref }}
