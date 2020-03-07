@@ -1,4 +1,4 @@
-# Octodns Action
+# octodns-action
 
 This action runs [**github/octodns**](https://github.com/github/octodns) to deploy your DNS config.
 
