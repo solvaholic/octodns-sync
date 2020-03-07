@@ -24,8 +24,11 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         _repo: ${{ github.repository }}
         _api: https://api.github.com
-        _tag_name: "${{ github.event.release.tag_name }}"
+        _tag_name: ${{ github.event.release.tag_name }}
+        _tag_sha: ${{ github.sha }}
       run: |
-        echo event, action: ${{ github.event_name }}, ${{ github.event.action }}
-        echo _tag_name: ${_tag_name}
-        echo _repo, _api: ${_repo}, ${_api}
+        echo _tag_sha: ${_tag_sha}
+        _tag_sha=$(curl -sL -H "Authorization: token ${GITHUB_TOKEN} \
+          "${_api}/repos/${_repo}/git/ref/tags/${_tag_name}" | \
+          jq -r .object.sha)"
+        echo _tag_sha: ${_tag_sha}
