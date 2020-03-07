@@ -1,0 +1,31 @@
+name: Housekeeping
+
+on: release
+
+# A workflow run is made up of 1+ jobs that can run sequentially or in parallel
+# Steps represent a sequence of tasks that will be executed as part of a job
+
+jobs:
+
+  # When a release is published, bump the corresponding short tag.
+  # For example, when v1.0.4 was published, update v1 to v1.0.4's SHA.
+  # TODO: (step) Only update when the published release is also the latest.
+  update_short_tag:
+    if: github.event_name == 'release' && github.event.action == 'published'
+    name: Update short tag
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Update the short tag to match the release tag
+        run: |
+          _mytoken={{ secrets.GITHUB_TOKEN }}
+          _repo={{ github.repository }}
+          _api=https://api.github.com
+          _tag_name="{{ github.event.release.tag_name }}"
+          _tag_sha=$(curl -sL -H "Authorization: token ${_mytoken} \
+            "${_api}/repos/${_repo}/git/ref/tags/${_tag_name}" | \
+            jq -r .object.sha)"
+          curl -sL -XPATCH -H "Authorization: token ${_mytoken}" \
+            -d "{\"sha\": \"${_tag_sha}\"}" \
+            "${_api}/repos/${_repo}/git/refs/tags/${_tag_name%%.*}"
