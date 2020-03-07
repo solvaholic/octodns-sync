@@ -17,15 +17,15 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'published'
 
     steps:
-      - name: Update the short tag to match the release tag
-        run: |
-          _mytoken={{ secrets.GITHUB_TOKEN }}
-          _repo={{ github.repository }}
-          _api=https://api.github.com
-          _tag_name="{{ github.event.release.tag_name }}"
-          _tag_sha=$(curl -sL -H "Authorization: token ${_mytoken} \
-            "${_api}/repos/${_repo}/git/ref/tags/${_tag_name}" | \
-            jq -r .object.sha)"
-          curl -sL -XPATCH -H "Authorization: token ${_mytoken}" \
-            -d "{\"sha\": \"${_tag_sha}\"}" \
-            "${_api}/repos/${_repo}/git/refs/tags/${_tag_name%%.*}"
+    - name: Update the short tag to match the release tag
+      run: |
+        _mytoken={{ secrets.GITHUB_TOKEN }}
+        _repo={{ github.repository }}
+        _api=https://api.github.com
+        _tag_name="{{ github.event.release.tag_name }}"
+        _tag_sha=$(curl -sL -H "Authorization: token ${_mytoken} \
+          "${_api}/repos/${_repo}/git/ref/tags/${_tag_name}" | \
+          jq -r .object.sha)"
+        curl -sL -XPATCH -H "Authorization: token ${_mytoken}" \
+          -d "{\"sha\": \"${_tag_sha}\"}" \
+          "${_api}/repos/${_repo}/git/refs/tags/${_tag_name%%.*}"
