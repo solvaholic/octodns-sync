@@ -10,4 +10,5 @@ RUN git clone --branch v0.9.9 --depth 1 https://github.com/github/octodns.git /o
 RUN . /env/bin/activate && pip install /octodns
 
 COPY entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
