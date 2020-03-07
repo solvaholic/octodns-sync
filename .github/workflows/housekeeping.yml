@@ -13,7 +13,6 @@ jobs:
   # TODO: (step) Only update when the published release is also the latest.
   updateshorttag:
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
 
     steps:
     - name: Update the short tag to match the release tag
