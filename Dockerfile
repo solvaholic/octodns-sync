@@ -1,8 +1,8 @@
 # Run octodns with your config.
 
-FROM python:3-slim
+FROM python:3-alpine
 
-RUN (apt update || true) && apt install -y git
+RUN apk -U upgrade; apk add git
 
 COPY entrypoint.sh /entrypoint.sh
 COPY octodns-action.sh /octodns-action.sh
