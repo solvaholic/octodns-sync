@@ -1,6 +1,6 @@
 # Perform general housekeeping tasks for this repo.
 
-name: Housework
+name: Housekeeping
 
 on:
   release:
@@ -18,8 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Update the short tag to match the release tag
+    - name: Create/update the short tag to match the release tag
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         _repo: ${{ github.repository }}
@@ -29,6 +28,9 @@ jobs:
       run: |
         echo _tag_sha: ${_tag_sha}
         _a="Authorization: token ${GITHUB_TOKEN}"
+        _b="{\"ref\": \"refs/tags/${_tag_name%%.*}\", \"sha\": \"${_tag_sha}\"}"
+        _c="${_api}/repos/${_repo}/git/refs"
+        curl -sL -XPOST -H "${_a}" -d "${_b}" "${_c}"
         _b="{\"sha\": \"${_tag_sha}\"}"
         _c="${_api}/repos/${_repo}/git/refs/tags/${_tag_name%%.*}"
         curl -sL -XPATCH -H "${_a}" -d "${_b}" "${_c}"
