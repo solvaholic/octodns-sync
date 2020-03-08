@@ -17,8 +17,8 @@ inputs:
     default: ''
 
 runs:
-  using: 'ubuntu-latest'
-  main: 'octodns-action.sh'
+  using: 'docker'
+  image: 'Dockerfile'
   args:
     - ${{ inputs.config_path }}
     - ${{ inputs.pip_extras }}
