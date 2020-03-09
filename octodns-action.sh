@@ -5,7 +5,7 @@
 # Requirements:
 #   - $GITHUB_WORKSPACE contains a clone of the user's config repository.
 
-# TODO:
+# TODO: Implement octodns override, so user can run octodns from a fork:
 #   - If $OVERRIDE_OCTODNS is set, $GITHUB_WORKSPACE/$OCTODNS_PATH contains a
 #     runnable copy of octodns.
 
@@ -21,8 +21,6 @@ fi
 
 # Change to config directory, so relative paths will work.
 cd "$(dirname "${CONFIG_PATH}")"
-
-# TODO: Implement octodns override, so user can run octodns from a fork.
 
 # Get octodns, if it's not already there.
 if ! git rev-parse --resolve-git-dir /octodns/.git 2>&1 >/dev/null; then
