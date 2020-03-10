@@ -5,7 +5,7 @@ description: 'Run github/octodns to deploy your DNS config.'
 inputs:
   config_path:
     description: 'Path, relative to your repository root, of the config file you would like octodns to use.'
-    required: false
+    required: true
     default: 'dns/public.yaml'
   pip_extras:
     description: 'List packages required by octodns for your DNS providers. Check the list of supported providers to find requirements for yours.'
