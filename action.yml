@@ -1,7 +1,7 @@
 # action.yml
 # https://help.github.com/en/actions/building-actions/metadata-syntax-for-github-actions
 name: 'octodns-action'
-description: 'Run github/octodns to deploy your DNS config.'
+description: 'Run github/octodns to deploy your DNS config to any cloud.'
 inputs:
   config_path:
     description: 'Path, relative to your repository root, of the config file you would like octodns to use.'
