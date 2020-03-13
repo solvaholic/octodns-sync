@@ -6,11 +6,7 @@ inputs:
   config_path:
     description: 'Path, relative to your repository root, of the config file you would like octodns to use.'
     required: true
-    default: 'dns/public.yaml'
-  pip_extras:
-    description: 'List packages required by octodns for your DNS providers. Check the list of supported providers to find requirements for yours.'
-    required: false
-    default: ''
+    default: 'public.yaml'
   doit:
     description: 'Really do it? Set "--doit" to do it; Any other string to not do it.'
     required: false

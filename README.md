@@ -32,8 +32,17 @@ jobs:
       - name: Publish
         uses: solvaholic/octodns-action@v1
         with:
-          config_path: dns/public.yml
+          config_path: public.yaml
           doit: --doit
+```
+
+Please note running this action that way :point_up: will rebuild the Docker image on every run. This adds about 40 seconds to run time, and it uses more processing and I/O. To use [the image hosted on Docker hub](https://hub.docker.com/repository/docker/solvaholic/octodns-action) instead, pass the same `args` you would to `octodns-sync`:
+
+```
+      - name: Publish
+        uses: docker://solvaholic/octodns-action:v1
+        with:
+          args: public.yaml --doit
 ```
 
 ## Inputs
@@ -74,15 +83,15 @@ Default `""` (empty string).
 Notice this example uses `wslpath -a`. If you're not running this in Linux in WSL in Windows, you'll probably use `realpath` or so.
 
 ```
-_image=docker.pkg.github.com/solvaholic/octodns-action:latest
+_image=solvaholic/octodns-action:v1
 _config_path=dns/config/public.yaml   # Path to your config, from inside the container
 _env_path=dns/.env                    # .env file with secret keys and stuff
 _volume="$(wslpath -a ./dns)"         # Path Docker will mount at $_mountpoint
 _mountpoint=/config                   # Mountpoint for your config directory
 
 # Test changes:
-docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path} ${_pip_extras}
+docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path}
 
 # Really do it:
-docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path} ${_pip_extras} --doit
+docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path} --doit
 ```
