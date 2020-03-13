@@ -11,7 +11,7 @@ CONFIG_PATH="${GITHUB_WORKSPACE:-/config}/${1:-public.yaml}"
 DOIT="$2"
 
 # Change to config directory, so relative paths will work.
-cd "$(dirname "${CONFIG_PATH}")" || exit ${?}
+cd "$(dirname "${CONFIG_PATH}")" || echo "INFO: Cannot cd to $(dirname "${CONFIG_PATH}")."
 
 # Get octodns, if it's not already there.
 if ! git rev-parse --resolve-git-dir /octodns/.git >/dev/null 2>&1; then
