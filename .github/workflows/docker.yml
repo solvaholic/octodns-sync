@@ -82,10 +82,10 @@ jobs:
           docker tag image $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-      - name: Login to hub.docker.com
-        run: echo "${{ secrets.dockerhub_token }}" | docker login hub.docker.com -u ${{ github.actor }} --password-stdin
+      - name: Login to Docker hub
+        run: echo "${{ secrets.dockerhub_token }}" | docker login -u ${{ github.actor }} --password-stdin
 
-      - name: Push image to hub.docker.com
+      - name: Push image to Docker hub
         run: |
           IMAGE_ID=solvaholic/$IMAGE_NAME
 
