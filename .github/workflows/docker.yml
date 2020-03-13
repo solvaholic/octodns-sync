@@ -10,6 +10,7 @@ on:
       - Dockerfile
       - entrypoint.sh
       - octodns-action.sh
+      - touch
 
     # Publish `v1.2.3` tags as releases.
     tags:
