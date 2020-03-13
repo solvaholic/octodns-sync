@@ -7,11 +7,11 @@
 #     will default to /config.
 
 # Parse arguments.
-CONFIG_PATH="${GITHUB_WORKSPACE:-/config}/$1"
+CONFIG_PATH="${GITHUB_WORKSPACE:-/config}/${1:-public.yaml}"
 DOIT="$2"
 
 # Change to config directory, so relative paths will work.
-cd "$(dirname "${CONFIG_PATH}")"
+cd "$(dirname "${CONFIG_PATH}")" || exit ${?}
 
 # Get octodns, if it's not already there.
 if ! git rev-parse --resolve-git-dir /octodns/.git >/dev/null 2>&1; then
