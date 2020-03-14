@@ -7,8 +7,8 @@
 #     will default to /config.
 
 # Parse arguments.
-CONFIG_PATH="${GITHUB_WORKSPACE:-/config}/${1:-public.yaml}"
-DOIT="$2"
+CONFIG_PATH="${GITHUB_WORKSPACE}/${1:-public.yaml}"
+DOIT="${2}"
 
 # Change to config directory, so relative paths will work.
 cd "$(dirname "${CONFIG_PATH}")" || echo "INFO: Cannot cd to $(dirname "${CONFIG_PATH}")."
