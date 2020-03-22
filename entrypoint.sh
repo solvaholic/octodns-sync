@@ -6,7 +6,7 @@
 #   - /github/workspace contains a clone of the user's config repository.
 
 # If GITHUB_WORKSPACE is set, assume repository root is /github/workspace.
-CONFIG_PATH="{GITHUB_WORKSPACE:+/github/workspace}/${1:-public.yaml}"
+CONFIG_PATH="${GITHUB_WORKSPACE:+/github/workspace}/${1:-public.yaml}"
 
 DOIT="${2}"
 
