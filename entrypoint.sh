@@ -26,9 +26,9 @@ if ! command -v octodns-sync >/dev/null 2>&1; then
   pip3 install /octodns
 fi
 
-# Exit 0, if it looks like we're just here to install.
+# Exit 0, if $CONFIG_PATH is not readable.
 if [ ! -r "${CONFIG_PATH}" ]; then
-  echo "INFO: Assumed we're just installing. Exit 0."
+  echo "INFO: Config '${CONFIG_PATH}' is not readable. Exit 0."
   exit 0
 fi
 
