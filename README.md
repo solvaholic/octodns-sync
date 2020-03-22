@@ -17,7 +17,7 @@ on:
     branches:
       - master
     paths:
-      - 'dns/**'
+      - '*.yaml'
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.route53_aws_key_id }}
@@ -32,9 +32,17 @@ jobs:
       - name: Publish
         uses: solvaholic/octodns-action@v1
         with:
-          config_path: dns/public.yml
-          pip_extras: boto3
+          config_path: public.yaml
           doit: --doit
+```
+
+Please note running this action that way :point_up: will rebuild the Docker image on every run. This adds about 40 seconds to run time, and it uses more processing and I/O. To use [the image hosted on Docker hub](https://hub.docker.com/repository/docker/solvaholic/octodns-action) instead, pass the same `args` you would to `octodns-sync`:
+
+```
+      - name: Publish
+        uses: docker://solvaholic/octodns-action:v1
+        with:
+          args: public.yaml --doit
 ```
 
 ## Inputs
@@ -60,29 +68,11 @@ env:
 
 Default `"dns/public.yaml"`.
 
-### `pip-extras`
-
-(**Optional**) List packages required by octodns for your DNS providers. Check the list of supported providers to find requirements for yours.
-
-Default `""` (empty string).
-
 ### `doit`
 
 (**Optional**) Really do it? Set "--doit" to do it; Any other string to not do it.
 
 Default `""` (empty string).
-
-### `fork-name`
-
-(**Not implemented**) Name of the GitHub repository containing the octodns code you'd like to run.
-
-Default `"github/octodns"`.
-
-### `release-tag`
-
-(**Not implemented**) Tag marking the release of the octodns code you'd like to run.
-
-Default `"v0.9.9"`.
 
 ## Outputs
 
@@ -93,16 +83,15 @@ Default `"v0.9.9"`.
 Notice this example uses `wslpath -a`. If you're not running this in Linux in WSL in Windows, you'll probably use `realpath` or so.
 
 ```
-_image=docker.pkg.github.com/solvaholic/octodns-action:latest
+_image=solvaholic/octodns-action:v1
 _config_path=dns/config/public.yaml   # Path to your config, from inside the container
-_pip_extras=boto3                     # Additional packages your DNS provider requires
 _env_path=dns/.env                    # .env file with secret keys and stuff
 _volume="$(wslpath -a ./dns)"         # Path Docker will mount at $_mountpoint
-_mountpoint=/dns                      # Mountpoint for your config directory
+_mountpoint=/config                   # Mountpoint for your config directory
 
 # Test changes:
-docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path} ${_pip_extras}
+docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path}
 
 # Really do it:
-docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path} ${_pip_extras} --doit
+docker run --rm -v "${_volume}":${_mountpoint} --env-file ${_env_path} ${_image} ${_config_path} --doit
 ```
