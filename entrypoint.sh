@@ -13,12 +13,6 @@ DOIT="${2}"
 # Change to config directory, so relative paths will work.
 cd "$(dirname "${CONFIG_PATH}")" || echo "INFO: Cannot cd to $(dirname "${CONFIG_PATH}")."
 
-# If $CONFIG_PATH is not in a Git repository, fail.
-if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
-  echo "FAIL: Did not find your config repository."
-  exit 1
-fi
-
 # Get octodns, if it's not already there.
 if ! git rev-parse --resolve-git-dir /octodns/.git >/dev/null 2>&1; then
   git clone --branch v0.9.9 --depth 1 \
