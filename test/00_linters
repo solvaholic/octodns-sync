@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#
+# Lint the current checkout.
+#
+# Usage:
+#   ./test/00_linters
+#
+
+# Change directory to the root of this repository.
+cd "$(git rev-parse --show-toplevel)" || return
+
+# Set environment variables.
+. ./.config
+
+echo "=== Shellcheck ==="
+shellcheck -x .config script/* test/* entrypoint.sh
+
+echo "=== yamllint ==="
+yamllint ./*.yml .github/workflows/*.yml

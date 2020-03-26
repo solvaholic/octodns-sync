@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#
+# Use these scripts to (test and) deploy the octodns config in this repository.
+#
+# - script/test: Test this version of the configuration.
+#
+
+# Change directory to the root of this repository.
+cd "$(git rev-parse --show-toplevel)" || return
+
+# Set environment variables.
+. ./.config
+
+# - Lint all the things.
+./test/00_linters
+
+# - Do our Docker registry creds work?
+./test/05_test-creds
+
+# - Test our Dockerfiles.
+for i in ./Dockerfile*; do
+  echo "INFO: ./test/10_test-build ${i}"
+  ./test/10_test-build "${i}"
+done
