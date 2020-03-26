@@ -1,20 +1,22 @@
 # action.yml
 # https://help.github.com/en/actions/building-actions/metadata-syntax-for-github-actions
-name: 'octodns-action'
+name: 'octodns-sync'
 description: 'Run github/octodns to deploy your DNS config to any cloud.'
 inputs:
   config_path:
-    description: 'Path, relative to your repository root, of the config file you would like octodns to use.'
+    description: 'Path, relative to your repository root, of the config file
+                  you would like octodns to use.'
     required: true
     default: 'public.yaml'
   doit:
-    description: 'Really do it? Set "--doit" to do it; Any other string to not do it.'
+    description: 'Really do it? Set "--doit" to do it; Any other string to
+                  not do it.'
     required: false
     default: ''
 
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://solvaholic/octodns-sync:2.0.0'
   args:
     - ${{ inputs.config_path }}
     - ${{ inputs.doit }}

@@ -1,4 +1,4 @@
-# Run octodns with your config.
+# Run octodns-sync with your config.
 
 FROM python:3-slim
 
