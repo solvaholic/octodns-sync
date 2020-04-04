@@ -1,0 +1,99 @@
+#
+# - Only run on the template repository itself.
+# - For each target repository:
+#   - Clone the target repository. Check out a branch.
+#   - Copy files from the template onto the target clone.
+#   - Push the branch to the target repository.
+#   - Create a pull request in the target repository.
+#
+
+# TODO:
+# - Only run if target was created from template.
+# - Switch to gh. Check https://github.com/cli/cli/issues/297 for updates.
+
+on:
+  push:
+    branches:
+      - master
+      - try-syncing
+
+env:
+  BRANCH_NAME: template/${{ github.sha }}
+  GIT_AUTHOR_NAME: ${{ github.event.head_commit.author.name }}
+  GIT_AUTHOR_EMAIL: ${{ github.event.head_commit.author.email }}
+
+jobs:
+  sync:
+    # Only run on the template repository itself.
+    if: github.repository == 'solvaholic/template'
+    name: Push changes to ${{ matrix.target_repo }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # List each repository you'd like to sync changes to.
+        # Note: ${{ secrets.my_token }} must have push access to each.
+        target_repo:
+          - solvaholic/crispy-disco
+          - solvaholic/docker
+          - solvaholic/myterms.fyi
+          - solvaholic/octodns-sync
+          - solvaholic/shiny-enigma
+
+    steps:
+      - name: Check out template repository
+        uses: actions/checkout@v2
+        with:
+          path: ${{ github.repository }}
+
+      # Clone the target repository. Check out a branch.
+      - name: Check out target repository
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ matrix.target_repo }}
+          token: ${{ secrets.my_token }}
+          path: ${{ matrix.target_repo }}
+      - name: Create branch in target repository ${{ matrix.target_repo }}
+        run: git -C "${{ matrix.target_repo }}" checkout -b "${BRANCH_NAME}"
+
+      # Copy files from the template onto the target clone.
+      - name: Copy template contents
+        run: |
+          _files="$(find ${{ github.repository }} \
+            ! -path "*/.git/*" \
+            ! -name ".gitignore" \
+            ! -name "README.md" \
+            -type f \
+            -print)"
+          for _file in ${_files}; do
+            _src="${_file}"
+            _dst="${{ matrix.target_repo }}/${_file#${{ github.repository }}/}"
+            # TODO: Find a more robust / elegant way to get this :point_down:.
+            _dst="${_dst%/*}/"
+            echo "INFO: Copy '${_src}' to '${_dst}'."
+            cp "${_src}" "${_dst}"
+          done
+          git -C ${{ matrix.target_repo }} config user.name "${GIT_AUTHOR_NAME}"
+          git -C ${{ matrix.target_repo }} config \
+            user.email "${GIT_AUTHOR_EMAIL}"
+          git -C ${{ matrix.target_repo }} add .
+          git -C ${{ matrix.target_repo }} commit \
+            -m "Sync from template@${{ github.sha }}"
+
+      # Push the branch to the target repository.
+      - name: Push topic branch
+        run: git -C ${{ matrix.target_repo }} push -u origin "${BRANCH_NAME}"
+
+      # Create a pull request in the target repository.
+      - name: Create pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.my_token }}
+          GITHUB_USER: ${{ github.actor }}
+        run: |
+          pushd ${{ matrix.target_repo }}
+          hub pull-request \
+            -b master \
+            -h "${BRANCH_NAME}" \
+            --no-edit \
+            -m "(title) Sync updates from ${{ github.repository }}" \
+            -m "(body) Sync updates from ${{ github.repository }}"
+          popd
