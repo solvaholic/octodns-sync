@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash -l
 
 # Run octodns-sync with your config.
 
@@ -39,7 +39,18 @@ fi
 # Run octodns-sync.
 echo "INFO: _config_path: ${_config_path}"
 if [ "${_doit}" = "--doit" ]; then
-  octodns-sync --config-file="${_config_path}" --doit
+  RESULT=$(octodns-sync --config-file="${_config_path}" --log-stream-stdout --doit)
 else
-  octodns-sync --config-file="${_config_path}"
+  RESULT=$(octodns-sync --config-file="${_config_path}" --log-stream-stdout)
 fi
+echo "$RESULT"
+
+# We want the result after a line starting with *
+SHORT_RESULT=$(echo "$RESULT" | sed -ne "/\*/,$ p")
+
+# We need to escape newlines or we only get first line of result
+SHORT_RESULT="${SHORT_RESULT//'%'/'%25'}"
+SHORT_RESULT="${SHORT_RESULT//$'\n'/'%0A'}"
+SHORT_RESULT="${SHORT_RESULT//$'\r'/'%0D'}"
+
+echo "::set-output name=result::$SHORT_RESULT"
