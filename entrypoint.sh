@@ -17,7 +17,7 @@ cd "$(dirname "${_config_path}")" || echo "INFO: Cannot cd to $(dirname "${_conf
 # Get octodns, if it's not already there.
 # (This should only run during docker build.)
 if ! git rev-parse --resolve-git-dir /octodns/.git >/dev/null 2>&1; then
-  git clone --branch v0.9.9 --depth 1 \
+  git clone --branch v0.9.10 --depth 1 \
   https://github.com/github/octodns.git /octodns
 fi
 
