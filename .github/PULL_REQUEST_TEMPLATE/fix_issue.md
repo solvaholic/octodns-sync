@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-### Fixes #ISSUE_NUMBER
+Fixes #ISSUE_NUMBER
 
 Changes proposed in this pull request:
 
