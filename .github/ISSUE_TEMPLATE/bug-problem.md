@@ -7,10 +7,10 @@ assignees: ''
 
 ---
 
-### What I did:
+### What I did
 
-### What I expected to happen:
+### What I expected to happen
 
-### What happened instead:
+### What happened instead
 
-### Additional info:
+### Additional info

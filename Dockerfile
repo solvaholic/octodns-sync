@@ -2,7 +2,8 @@
 
 FROM python:3-slim
 
-RUN apt update && apt install -y git && \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y git=1:2.20.1-2+deb10u3 && \
     rm -rf /tmp/* /var/lib/apt/lists/* /var/cache/apt/*
 
 COPY entrypoint.sh /entrypoint.sh

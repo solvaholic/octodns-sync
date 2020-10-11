@@ -40,8 +40,8 @@ fi
 echo "INFO: _config_path: ${_config_path}"
 if [ "${_doit}" = "--doit" ]; then
   octodns-sync --config-file="${_config_path}" \
-  --log-stream-stdout --doit | tee ${GITHUB_WORKSPACE}/octodns-sync.log
+  --log-stream-stdout --doit | tee "${GITHUB_WORKSPACE}/octodns-sync.log"
 else
   octodns-sync --config-file="${_config_path}" \
-  --log-stream-stdout | tee ${GITHUB_WORKSPACE}/octodns-sync.log
+  --log-stream-stdout | tee "${GITHUB_WORKSPACE}/octodns-sync.log"
 fi
