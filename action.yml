@@ -16,7 +16,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://solvaholic/octodns-sync:0c16d1d'
+  image: 'docker://solvaholic/octodns-sync:latest'
   args:
     - ${{ inputs.config_path }}
     - ${{ inputs.doit }}
