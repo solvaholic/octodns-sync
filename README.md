@@ -8,7 +8,7 @@ When you manage your octodns DNS configuration in a GitHub repository, this [Git
 
 ## Example workflow
 
-```
+```sh
 name: octodns-sync
 
 on:
@@ -42,12 +42,14 @@ jobs:
 
 (**Required**) To authenticate with your DNS provider, this action uses [encrypted secrets](https://help.github.com/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#about-encrypted-secrets) you've configured on your repository. For example, if you use Amazon Route53, [create these secrets](https://help.github.com/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) on the repository where you store your DNS configuration:
 
-    "route53-aws-key-id": "YOURIDGOESHERE"
-    "route53-aws-secret-access-key": "YOURKEYGOESHERE"
+```sh
+"route53-aws-key-id": "YOURIDGOESHERE"
+"route53-aws-secret-access-key": "YOURKEYGOESHERE"
+```
 
 Then include them as environment variables in your workflow. For example:
 
-```
+```sh
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.route53-aws-key-id }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.route53-aws-secret-access-key }}
@@ -69,7 +71,7 @@ Default `""` (empty string).
 
 `octodns-sync` will compare your configuration file to the configurations your providers have, and report any planned changes. For example:
 
-```
+```sh
 ********************************************************************************
 * example.org.
 ********************************************************************************
@@ -89,7 +91,7 @@ Default `""` (empty string).
 
 ## Run locally
 
-```
+```sh
 _image=solvaholic/octodns-sync:2
 _config_path=public.yaml    # Path to config file in your repository
 _env_path=.env              # .env file with secret keys and stuff
