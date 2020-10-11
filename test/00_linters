@@ -13,8 +13,20 @@ cd "$(git rev-parse --show-toplevel)" || return
 # Set environment variables.
 . ./.config
 
-echo "=== Shellcheck ==="
-shellcheck -x .config script/* test/* entrypoint.sh
-
-echo "=== yamllint ==="
-yamllint ./*.yml .github/workflows/*.yml
+echo "=== Run github/super-linter ==="
+if command -v docker >/dev/null && command -v realpath >/dev/null \
+&& [ -d . ] && [ -x . ]; then
+  echo " "
+  echo "Running github/super-linter..."
+  echo " "
+  # TODO: Find ways to honor .gitignore and validate JSON.
+  docker run --rm \
+    -e VALIDATE_JSON=false \
+    -e RUN_LOCAL=true \
+    -v "$(realpath .)":/tmp/lint:ro \
+    ghcr.io/github/super-linter:latest
+else
+  echo " "
+  echo "This test requires Docker.io or Docker Desktop to be installed."
+  echo " "
+fi
