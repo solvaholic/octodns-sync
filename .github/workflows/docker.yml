@@ -1,4 +1,4 @@
-name: Docker
+name: Dockerfile
 
 on:
   push:
@@ -24,8 +24,6 @@ on:
       - .github/workflows/docker.yml
     branches:
       - master
-    tags:
-      - v[12].[0-9]+.[0-9]+
 
 env:
   IMAGE_NAME: octodns-sync
@@ -33,7 +31,7 @@ env:
 jobs:
   # Prove the image successfully builds.
   # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  test:
+  test-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,9 +48,9 @@ jobs:
 
   # Push image to GitHub's package registry and to Docker hub.
   # See also https://docs.docker.com/docker-hub/builds/
-  push:
-    # Ensure test job passes before pushing images.
-    needs: test
+  push-image:
+    # Ensure test-build job passes before pushing images.
+    needs: test-build
 
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -63,15 +61,15 @@ jobs:
       - name: Build image
         run: docker build . --file Dockerfile --tag image
 
-      - name: Login to docker.pkg.github.com
+      - name: Login to ghcr.io
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | \
-          docker login docker.pkg.github.com \
+          echo "${{ secrets.PAT }}" | \
+          docker login ghcr.io \
           -u ${{ github.actor }} --password-stdin
 
-      - name: Push image to docker.pkg.github.com
+      - name: Push image to ghcr.io
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          IMAGE_ID=ghcr.io/${{ github.actor }}/$IMAGE_NAME
 
           # Build image tag strings to push to GitHub's package registry.
           _push_tags=""
@@ -85,6 +83,7 @@ jobs:
 
           # If GITHUB_REF looks like a version tag, use the tag name after
           # the leading v so vX.Y.Z becomes X.Y.Z.
+          # TODO: Can this v be removed? :point_down:
           elif [[ "${GITHUB_REF}" == "refs/tags/v"* ]]; then
             VERSION=${GITHUB_REF#refs/tags/v}
             _push_tags+=\ $IMAGE_ID:$VERSION
