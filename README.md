@@ -96,7 +96,7 @@ Default `""` (empty string).
 ## Run locally
 
 ```sh
-_image=solvaholic/octodns-sync:2
+_image=ghcr.io/solvaholic/octodns-sync:latest
 _config_path=public.yaml    # Path to config file in your repository
 _env_path=.env              # .env file with secret keys and stuff
 _volume="$(realpath .)"     # Path Docker will mount at $_mountpoint

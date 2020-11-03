@@ -46,7 +46,7 @@ jobs:
             docker build . --file Dockerfile
           fi
 
-  # Push image to GitHub's container registry and to Docker hub.
+  # Push image to GitHub's container registry.
   # See also https://docs.docker.com/docker-hub/builds/
   push-image:
     # Ensure test-build job passes before pushing images.
@@ -84,48 +84,6 @@ jobs:
           # If GITHUB_REF looks like a version tag, use the tag name after
           # the leading v so vX.Y.Z becomes X.Y.Z.
           # TODO: Can this v be removed? :point_down:
-          elif [[ "${GITHUB_REF}" == "refs/tags/v"* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/v}
-            _push_tags+=\ $IMAGE_ID:$VERSION
-            # If this looks like a semantic version tag, also tag the major.
-            _push_tags+=\ $IMAGE_ID:${VERSION%%.*}
-
-          # If GITHUB_REF didn't match either of those rules, freak out.
-          else
-            echo "FAIL: Did not recognize GITHUB_REF '${GITHUB_REF}'."
-            exit 1
-          fi
-
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-
-          for _this_tag in ${_push_tags}; do
-            echo "INFO: Tagging and pushing ${_this_tag}."
-            docker tag image ${_this_tag}
-            docker push ${_this_tag}
-          done
-
-      - name: Login to Docker hub
-        run: |
-          echo "${{ secrets.dockerhub_token }}" | \
-          docker login -u ${{ github.actor }} --password-stdin
-
-      - name: Push image to Docker hub
-        run: |
-          IMAGE_ID=${{ github.actor }}/$IMAGE_NAME
-
-          # Build image tag strings to push to Docker hub.
-          _push_tags=""
-
-          # If GITHUB_REF is a branch, use the branch name.
-          if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
-            VERSION=${GITHUB_REF#refs/heads/}
-            # If branchname is mater, use the latest instead.
-            [ "$VERSION" = "main" ] && VERSION=latest
-            _push_tags+=\ $IMAGE_ID:$VERSION
-
-          # If GITHUB_REF looks like a version tag, use the tag name after
-          # the leading v so vX.Y.Z becomes X.Y.Z.
           elif [[ "${GITHUB_REF}" == "refs/tags/v"* ]]; then
             VERSION=${GITHUB_REF#refs/tags/v}
             _push_tags+=\ $IMAGE_ID:$VERSION
