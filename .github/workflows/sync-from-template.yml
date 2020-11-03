@@ -22,7 +22,7 @@ on:
       - .github/workflows/sync-from-template.yml
 
 env:
-  BASE_BRANCH: master
+  BASE_BRANCH: main
   HEAD_BRANCH: chore/sync-from-template
   GIT_AUTHOR_NAME: ${{ github.repository_owner }}
   GIT_AUTHOR_EMAIL: ${{ github.repository_owner }}@users.noreply.github.com

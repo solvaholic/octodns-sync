@@ -12,10 +12,10 @@ When you manage your octodns DNS configuration in a GitHub repository, this [Git
 name: octodns-sync
 
 on:
-  # Deploy config whenever DNS changes are pushed to master.
+  # Deploy config whenever DNS changes are pushed to main.
   push:
     branches:
-      - master
+      - main
     paths:
       - '*.yaml'
 
@@ -25,7 +25,7 @@ env:
 
 jobs:
   publish:
-    name: Publish DNS config from master
+    name: Publish DNS config from main
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -8,9 +8,9 @@ on:
       - entrypoint.sh
       - .github/workflows/docker.yml
 
-    # Publish `master` as Docker `latest` image.
+    # Publish `main` as Docker `latest` image.
     branches:
-      - master
+      - main
 
     # Publish `vX.Y.Z` tags as releases.
     tags:
@@ -23,7 +23,7 @@ on:
       - entrypoint.sh
       - .github/workflows/docker.yml
     branches:
-      - master
+      - main
 
 env:
   IMAGE_NAME: octodns-sync
@@ -78,7 +78,7 @@ jobs:
           if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
             VERSION=${GITHUB_REF#refs/heads/}
             # If branchname is mater, use the latest instead.
-            [ "$VERSION" = "master" ] && VERSION=latest
+            [ "$VERSION" = "main" ] && VERSION=latest
             _push_tags+=\ $IMAGE_ID:$VERSION
 
           # If GITHUB_REF looks like a version tag, use the tag name after
@@ -121,7 +121,7 @@ jobs:
           if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
             VERSION=${GITHUB_REF#refs/heads/}
             # If branchname is mater, use the latest instead.
-            [ "$VERSION" = "master" ] && VERSION=latest
+            [ "$VERSION" = "main" ] && VERSION=latest
             _push_tags+=\ $IMAGE_ID:$VERSION
 
           # If GITHUB_REF looks like a version tag, use the tag name after
