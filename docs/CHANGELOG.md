@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [2.1.0] - 2020-11-03
+
+### Added
 
 - ([#11](https://github.com/solvaholic/octodns-sync/pull/11)) Write `octodns-sync` output to `octodns-sync.log` in the workspace directory.
 - Push the **solvaholic/octodns-sync** container image to GitHub's container registry.
@@ -26,10 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Stop pushing the **solvaholic/octodns-sync** container image GitHub's package registry.
 - Stop pushing the **solvaholic/octodns-sync** container image to Docker hub.
-
-### Fixed
-
-### Security
 
 ## [2.0.0] - 2020-03-25
 
