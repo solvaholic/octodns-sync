@@ -5,6 +5,8 @@
 # Requirements:
 #   - /github/workspace contains a clone of the user's config repository.
 
+set -o pipefail
+
 # If GITHUB_WORKSPACE is set, prepend it to $1 for _config_path.
 echo "INFO: GITHUB_WORKSPACE is '${GITHUB_WORKSPACE}'."
 _config_path="${GITHUB_WORKSPACE%/}/${1:-public.yaml}"
