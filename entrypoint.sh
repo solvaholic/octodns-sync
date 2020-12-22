@@ -1,11 +1,9 @@
-#!/bin/sh -l
+#!/bin/bash
 
 # Run octodns-sync with your config.
 
 # Requirements:
 #   - /github/workspace contains a clone of the user's config repository.
-
-set -o pipefail
 
 # If GITHUB_WORKSPACE is set, prepend it to $1 for _config_path.
 echo "INFO: GITHUB_WORKSPACE is '${GITHUB_WORKSPACE}'."
