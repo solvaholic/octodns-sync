@@ -1,1 +1,1 @@
-git+http://github.com/github/octodns@v0.9.10#egg=octodns
+git+http://github.com/github/octodns@v0.9.11#egg=octodns
