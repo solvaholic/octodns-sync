@@ -14,6 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [issue23] - Now
+
+### Added
+### Changed
+
+- Upgrade **github/octodns** from v0.9.10 to v0.9.11.
+- ([#22](https://github.com/solvaholic/octodns-sync/issues/22)) Start with the **python:3.7-slim** image rather than **python:3-slim**.
+
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [2.1.0] - 2020-11-03
 
 ### Added
