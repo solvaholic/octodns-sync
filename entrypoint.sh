@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh -l
 
 # Run octodns-sync with your config.
 
