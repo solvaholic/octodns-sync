@@ -2,7 +2,7 @@ name: Dockerfile
 
 on:
   push:
-    # Run when one of these files change.
+    # Only run when one of these files change.
     paths:
       - 'Dockerfile*'
       - entrypoint.sh
@@ -24,9 +24,6 @@ on:
       - .github/workflows/docker.yml
     branches:
       - main
-
-  # Run when manually triggered.
-  workflow_dispatch:
 
 env:
   IMAGE_NAME: octodns-sync
@@ -56,7 +53,7 @@ jobs:
     needs: test-build
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v2
@@ -80,10 +77,8 @@ jobs:
           # If GITHUB_REF is a branch, use the branch name.
           if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
             VERSION=${GITHUB_REF#refs/heads/}
-            # If branchname is main, use latest instead.
-            if [ "$VERSION" = "main" ]; then
-              VERSION=latest
-            fi
+            # If branchname is mater, use the latest instead.
+            [ "$VERSION" = "main" ] && VERSION=latest
             _push_tags+=\ $IMAGE_ID:$VERSION
 
           # If GITHUB_REF looks like a version tag, use the tag name after
