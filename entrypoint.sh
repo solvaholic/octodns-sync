@@ -39,9 +39,12 @@ fi
 # Run octodns-sync.
 echo "INFO: _config_path: ${_config_path}"
 if [ "${_doit}" = "--doit" ]; then
-  octodns-sync --config-file="${_config_path}" \
-  --log-stream-stdout --doit | tee "${GITHUB_WORKSPACE}/octodns-sync.log"
+  script "${GITHUB_WORKSPACE}/octodns-sync.log" -e -c \
+  "octodns-sync --config-file=\"${_config_path}\" \
+  --log-stream-stdout --doit"
 else
-  octodns-sync --config-file="${_config_path}" \
-  --log-stream-stdout | tee "${GITHUB_WORKSPACE}/octodns-sync.log"
+  script "${GITHUB_WORKSPACE}/octodns-sync.log" -e -c \
+  "octodns-sync --config-file=\"${_config_path}\" \
+  --log-stream-stdout"
 fi
+
