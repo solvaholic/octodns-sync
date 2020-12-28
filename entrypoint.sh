@@ -14,19 +14,11 @@ _doit="${2}"
 # Change to config directory, so relative paths will work.
 cd "$(dirname "${_config_path}")" || echo "INFO: Cannot cd to $(dirname "${_config_path}")."
 
-# Get octodns, if it's not already there.
-# (This should only run during docker build.)
-if ! git rev-parse --resolve-git-dir /octodns/.git >/dev/null 2>&1; then
-  git clone --branch v0.9.11 --depth 1 \
-  https://github.com/github/octodns.git /octodns
-fi
-
-# Install /octodns, if not already there.
+# Install octodns and dependencies.
 # (This should only run during docker build.)
 if ! command -v octodns-sync >/dev/null 2>&1; then
   pip3 install --upgrade pip
-  pip3 install -r /octodns/requirements.txt
-  pip3 install /octodns
+  pip3 install -r /requirements.txt
 fi
 
 # Exit 0, if $_config_path is not readable.
