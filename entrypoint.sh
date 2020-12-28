@@ -14,15 +14,6 @@ _doit="${2}"
 # Change to config directory, so relative paths will work.
 cd "$(dirname "${_config_path}")" || echo "INFO: Cannot cd to $(dirname "${_config_path}")."
 
-# If GITHUB_WORKSPACE is set, prepend it to $1 for _config_path.
-echo "INFO: GITHUB_WORKSPACE is '${GITHUB_WORKSPACE}'."
-_config_path="${GITHUB_WORKSPACE%/}/${1:-public.yaml}"
-
-_doit="${2}"
-
-# Change to config directory, so relative paths will work.
-cd "$(dirname "${_config_path}")" || echo "INFO: Cannot cd to $(dirname "${_config_path}")."
-
 # Install octodns and dependencies.
 # (This should only run during docker build.)
 if ! command -v octodns-sync >/dev/null 2>&1; then

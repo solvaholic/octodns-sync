@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Upgrade **github/octodns** from v0.9.10 to v0.9.11.
 - ([#22](https://github.com/solvaholic/octodns-sync/issues/22)) Build from the **python:3.7-slim** image rather than **python:3-slim**.
-- ([#NNN](https://github.com/solvaholic/octodns-sync/issues/NNN)) Install octodns from PyPI rather than a Git clone.
+- ([#28](https://github.com/solvaholic/octodns-sync/pull/28)) Install octodns from PyPI rather than a Git clone.
 
 ### Deprecated
 ### Removed
