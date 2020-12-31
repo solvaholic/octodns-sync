@@ -1,68 +1,99 @@
-name: Dockerfile
+name: Build, push, and test container
+
+# Use this workflow to:
+# - Manually build and push from a branch
+# - Automatically build and push on certain changes
+# - Automatically test new/udpated deployments
+
+# TODO: Automate build and push for cutting a release
+
+# TODO: Decide when/where/how to push major tag
 
 on:
-  push:
-    # Run when one of these files change.
-    paths:
-      - 'Dockerfile*'
-      - entrypoint.sh
-      - .github/workflows/docker.yml
-
-    # Publish `main` as Docker `latest` image.
-    branches:
-      - main
-
-    # Publish `vX.Y.Z` tags as releases.
-    tags:
-      - v[12]+.[0-9]+.[0-9]+
-
-  # Run tests for any pull requests.
-  pull_request:
-    paths:
-      - 'Dockerfile*'
-      - entrypoint.sh
-      - .github/workflows/docker.yml
-    branches:
-      - main
-
-  # Run when manually triggered.
+  # Run when manually triggered
   workflow_dispatch:
 
+  # Run when one of these files change
+  push:
+    paths:
+      - Dockerfile
+      - entrypoint.sh
+      - requirements.txt
+      - octodns-requirements.txt
+      - .github/workflows/docker.yml
+
+  # Run when a version tag is pushed
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
 env:
-  IMAGE_NAME: octodns-sync
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # Prove the image successfully builds.
-  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  test-build:
+  build-and-push:
     runs-on: ubuntu-latest
+
+    outputs:
+      fullref: ${{ steps.getshortref.outputs.fullref }}
+      shortref: ${{ steps.getshortref.outputs.shortref }}
+      tagbuilt: ${{ steps.buildimage.outputs.tagbuilt }}
+      tagpushed: ${{ steps.pushimage.outputs.tagpushed }}
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run tests
+      # Get the short reference name
+      - name: Get the short reference name
+        id: getshortref
         run: |
-          if [ -f docker-compose.test.yml ]; then
-            docker-compose --file docker-compose.test.yml build
-            docker-compose --file docker-compose.test.yml run sut
+          _short_ref=
+
+          if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
+            _short_ref=${GITHUB_REF#refs/heads/}
+
+          elif [[ "${GITHUB_REF}" == "refs/tags/"* ]]; then
+            _short_ref=${GITHUB_REF#refs/tags/}
+
           else
-            docker build . --file Dockerfile
+            echo "FAIL: Did not recognize GITHUB_REF '${GITHUB_REF}'."
+            exit 1
           fi
 
-  # Push image to GitHub's container registry.
-  # See also https://docs.docker.com/docker-hub/builds/
-  push-image:
-    # Ensure test-build job passes before pushing images.
-    needs: test-build
-
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-
-    steps:
-      - uses: actions/checkout@v2
+          echo "Set fullref to '${GITHUB_REF}'."
+          echo "Set shortref to '${_short_ref}'."
+          echo "::set-output name=fullref::${GITHUB_REF}"
+          echo "::set-output name=shortref::${_short_ref}"
 
       - name: Build image
-        run: docker build . --file Dockerfile --tag image
+        id: buildimage
+        run: |
+          _image_ver="${{ steps.getshortref.outputs.shortref }}"
+          _full_ref="${{ steps.getshortref.outputs.fullref }}"
+
+          if [ "${_image_ver}" = "main" ]; then
+            _image_ver=latest
+          elif [[ "${_full_ref}" == "refs/tags/v"* ]]; then
+            _image_ver=${_full_ref#refs/tags/v}
+          fi
+
+          _image_tag="ghcr.io/${IMAGE_NAME}:${_image_ver}"
+
+          if [ -r ./Dockerfile ]; then
+            echo "Found ./Dockerfile OK."
+          else
+            echo "FAIL: ./Dockerfile not readable."
+            exit 1
+          fi
+
+          if docker build . -q -t "${_image_tag}"; then
+            echo "Built '${_image_tag}' OK."
+          else
+            echo "FAIL: Failed to build '${_image_tag}'."
+            exit 1
+          fi
+
+          echo "Set tagbuilt to '${_image_tag}'."
+          echo "::set-output name=tagbuilt::${_image_tag}"
 
       - name: Login to ghcr.io
         run: |
@@ -71,41 +102,57 @@ jobs:
           -u ${{ github.actor }} --password-stdin
 
       - name: Push image to ghcr.io
+        id: pushimage
         run: |
-          IMAGE_ID=ghcr.io/${{ github.actor }}/$IMAGE_NAME
-
-          # Build image tag strings to push to GitHub's package registry.
-          _push_tags=""
-
-          # If GITHUB_REF is a branch, use the branch name.
-          if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
-            VERSION=${GITHUB_REF#refs/heads/}
-            # If branchname is main, use latest instead.
-            if [ "$VERSION" = "main" ]; then
-              VERSION=latest
-            fi
-            _push_tags+=\ $IMAGE_ID:$VERSION
-
-          # If GITHUB_REF looks like a version tag, use the tag name after
-          # the leading v so vX.Y.Z becomes X.Y.Z.
-          # TODO: Can this v be removed? :point_down:
-          elif [[ "${GITHUB_REF}" == "refs/tags/v"* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/v}
-            _push_tags+=\ $IMAGE_ID:$VERSION
-            # If this looks like a semantic version tag, also tag the major.
-            _push_tags+=\ $IMAGE_ID:${VERSION%%.*}
-
-          # If GITHUB_REF didn't match either of those rules, freak out.
+          _image_tag="${{ steps.buildimage.outputs.tagbuilt }}"
+          if docker push "${_image_tag}"; then
+            echo "Pushed '${_image_tag}' OK."
           else
-            echo "FAIL: Did not recognize GITHUB_REF '${GITHUB_REF}'."
+            echo "FAIL: Failed to push '${_image_tag}'."
             exit 1
           fi
+          echo "Set tagpushed to '${_image_tag}'."
+          echo "::set-output name=tagpushed::${_image_tag}"
 
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
+  test-published-action:
+    needs: build-and-push
+    env:
+      _tag_pushed: "${{ needs.build-and-push.outputs.tagpushed }}"
+      _short_ref: "${{ needs.build-and-push.outputs.shortref }}"
+    runs-on: ubuntu-latest
 
-          for _this_tag in ${_push_tags}; do
-            echo "INFO: Tagging and pushing ${_this_tag}."
-            docker tag image ${_this_tag}
-            docker push ${_this_tag}
-          done
+    outputs:
+      actionat: ${{ steps.findaction.outputs.actionat }}
+      tagpulled: ${{ steps.pullimage.outputs.tagpulled }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # TODO: Make this step :point_down: actually work
+      # Is the Action available at this reference?
+      - name: Verify Action is available
+        id: findaction
+        run: |
+          # _short_ref is set in this job's env
+          _actionat="${IMAGE_NAME}@${_short_ref}"
+          echo "Set actionat to '${_actionat}'."
+          echo "::set-output name=actionat::${_actionat}"
+
+      # Is the Docker image publicly available at this reference?
+      - name: Verify Docker image is available
+        id: pullimage
+        run: |
+          # _tag_pushed is set in this job's env
+          docker logout "${_tag_pushed%%/*}"
+          if docker pull -q "${_tag_pushed}"; then
+            echo "Pulled '${_tag_pushed}' OK."
+          else
+            echo "FAIL: Failed to pull '${_tag_pushed}'."
+            exit 1
+          fi
+          echo "Set tagpulled to '${_tag_pushed}'."
+          echo "::set-output name=tagpulled::${_tag_pushed}"
+
+      # TODO: Make these steps :point_down: actually work
+      # Run the ghcr.io image with sample data
+      # Run the locally built image with sample data
