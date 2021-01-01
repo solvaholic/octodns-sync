@@ -9,15 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
-
-- Upgrade **github/octodns** from v0.9.10 to v0.9.11.
-- ([#22](https://github.com/solvaholic/octodns-sync/issues/22)) Build from the **python:3.7-slim** image rather than **python:3-slim**.
-- ([#28](https://github.com/solvaholic/octodns-sync/pull/28)) Install octodns from PyPI rather than a Git clone.
-
 ### Deprecated
 ### Removed
 ### Fixed
 ### Security
+
+## [2.1.2] - 2020-12-28
+
+### Changed
+
+- Upgrade **github/octodns** from v0.9.10 to v0.9.11.
+- ([#22](https://github.com/solvaholic/octodns-sync/issues/22)) Build from the **python:3.7-slim** image rather than **python:3-slim**.
+- ([#28](https://github.com/solvaholic/octodns-sync/pull/28)) Install octodns from PyPI rather than a Git clone.
 
 ## [2.1.0] - 2020-11-03
 
