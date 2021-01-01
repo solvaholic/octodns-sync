@@ -2,26 +2,17 @@ name: Build, push, and test container
 
 # Use this workflow to:
 # - Manually build and push from a branch
-# - Automatically build and push on certain changes
+# - Automatically build and push on certain pushes
 # - Automatically test new/udpated deployments
-
-# TODO: Automate build and push for cutting a release
-
-# TODO: Decide when/where/how to push major tag
 
 on:
   # Run when manually triggered
   workflow_dispatch:
 
-  # Run when one of these files change
+  # Run when changes are pushed to main
   push:
-    paths:
-      - Dockerfile
-      - entrypoint.sh
-      - requirements.txt
-      - octodns-requirements.txt
-      - .github/workflows/docker.yml
-
+    branches:
+      - main
   # Run when a version tag is pushed
     tags:
       - v[0-9]+.[0-9]+.[0-9]+
@@ -34,48 +25,44 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      fullref: ${{ steps.getshortref.outputs.fullref }}
-      shortref: ${{ steps.getshortref.outputs.shortref }}
+      fullref: ${{ steps.gettagver.outputs.fullref }}
+      shortref: ${{ steps.gettagver.outputs.shortref }}
+      sharef: ${{ steps.gettagver.outputs.sharef }}
       tagbuilt: ${{ steps.buildimage.outputs.tagbuilt }}
       tagpushed: ${{ steps.pushimage.outputs.tagpushed }}
 
     steps:
       - uses: actions/checkout@v2
 
-      # Get the short reference name
-      - name: Get the short reference name
-        id: getshortref
+      - name: Get tag versions
+        id: gettagver
         run: |
+          _full_ref="${{ github.ref }}"
           _short_ref=
+          _sha_ref="${{ github.sha }}"
 
-          if [[ "${GITHUB_REF}" == "refs/heads/"* ]]; then
-            _short_ref=${GITHUB_REF#refs/heads/}
+          if [[ "${_full_ref}" == "refs/heads/"* ]]; then
+            _short_ref=${_full_ref#refs/heads/}
 
-          elif [[ "${GITHUB_REF}" == "refs/tags/"* ]]; then
-            _short_ref=${GITHUB_REF#refs/tags/}
+          elif [[ "${_full_ref}" == "refs/tags/"* ]]; then
+            _short_ref=${_full_ref#refs/tags/}
 
           else
-            echo "FAIL: Did not recognize GITHUB_REF '${GITHUB_REF}'."
+            echo "FAIL: Did not recognize GITHUB_REF '${_full_ref}'."
             exit 1
           fi
 
-          echo "Set fullref to '${GITHUB_REF}'."
+          echo "Set fullref to '${_full_ref}'."
           echo "Set shortref to '${_short_ref}'."
-          echo "::set-output name=fullref::${GITHUB_REF}"
+          echo "Set sharef to '${_sha_ref}'."
+          echo "::set-output name=fullref::${_full_ref}"
           echo "::set-output name=shortref::${_short_ref}"
+          echo "::set-output name=sharef::${_sha_ref}"
 
       - name: Build image
         id: buildimage
         run: |
-          _image_ver="${{ steps.getshortref.outputs.shortref }}"
-          _full_ref="${{ steps.getshortref.outputs.fullref }}"
-
-          if [ "${_image_ver}" = "main" ]; then
-            _image_ver=latest
-          elif [[ "${_full_ref}" == "refs/tags/v"* ]]; then
-            _image_ver=${_full_ref#refs/tags/v}
-          fi
-
+          _image_ver="${{ steps.gettagver.outputs.sharef }}"
           _image_tag="ghcr.io/${IMAGE_NAME}:${_image_ver}"
 
           if [ -r ./Dockerfile ]; then
@@ -101,20 +88,44 @@ jobs:
           docker login ghcr.io \
           -u ${{ github.actor }} --password-stdin
 
-      - name: Push image to ghcr.io
+      - name: Push image and tags to ghcr.io
+        # TODO: Decide when/where/how to push major tag
         id: pushimage
         run: |
-          _image_tag="${{ steps.buildimage.outputs.tagbuilt }}"
-          if docker push "${_image_tag}"; then
-            echo "Pushed '${_image_tag}' OK."
-          else
-            echo "FAIL: Failed to push '${_image_tag}'."
-            exit 1
-          fi
-          echo "Set tagpushed to '${_image_tag}'."
-          echo "::set-output name=tagpushed::${_image_tag}"
+          _built_tag="${{ steps.buildimage.outputs.tagbuilt }}"
+          _tags="${_built_tag}"
+          _image_ver="${{ steps.gettagver.outputs.shortref }}"
+          _full_ref="${{ steps.gettagver.outputs.fullref }}"
+          _tag_pushed=
 
-  test-published-action:
+          if [ "${_image_ver}" = "main" ]; then
+            _image_ver=latest
+          elif [[ "${_full_ref}" == "refs/tags/v"* ]]; then
+            _image_ver=${_full_ref#refs/tags/v}
+          fi
+
+          _tag_pushed="${_built_tag%:*}:${_image_ver}"
+          _tags="${_tags} ${_tag_pushed}"
+
+          for _tag in ${_tags}; do
+            if docker tag "${_built_tag}" "${_tag}"; then
+              echo "Tagged '${_tag}' OK."
+            else
+              echo "FAIL: Failed to tag '${_tag}'."
+              exit 1
+            fi
+            if docker push "${_tag}"; then
+              echo "Pushed '${_tag}' OK."
+            else
+              echo "FAIL: Failed to push '${_tag}'."
+              exit 1
+            fi
+          done
+
+          echo "Set tagpushed to '${_tag_pushed}'."
+          echo "::set-output name=tagpushed::${_tag_pushed}"
+
+  test-published-container:
     needs: build-and-push
     env:
       _tag_pushed: "${{ needs.build-and-push.outputs.tagpushed }}"
