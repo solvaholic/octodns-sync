@@ -11,6 +11,7 @@ on:
       version:
         description: 'Release version to create, for example 1.2.3'
         required: true
+        default: "2.1.3"
 
 env:
   GIT_AUTHOR_NAME: ${{ github.repository_owner }}
