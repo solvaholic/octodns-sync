@@ -1,41 +1,115 @@
-# Perform release workflow tasks for this repo.
+name: Create a release
 
-name: Release
+# Use this workflow to:
+# - Create a draft release from a branch
 
 on:
-  release:
-    types: [published]
+  # Run when manually triggered
+  workflow_dispatch:
+    inputs:
+      # User inputs the release version, for example `1.2.3`
+      version:
+        description: 'Release version to create, for example 1.2.3'
+        required: true
 
-# A workflow run is made up of 1+ jobs that can run sequentially or in parallel
-# Steps represent a sequence of tasks that will be executed as part of a job
+env:
+  GIT_AUTHOR_NAME: ${{ github.repository_owner }}
+  GIT_AUTHOR_EMAIL: ${{ github.repository_owner }}@users.noreply.github.com
 
 jobs:
-  # When a release is published, bump the corresponding short tag.
-  # For example, when v2.0.4 is published, update v2 to v2.0.4's SHA.
-  # TODO: Only run when tag_name matches /v[0-9]+\.[0-9]+\.[0-9]+/.
-  # TODO: Only update when the published release is also the latest.
-  bumptag:
+  create-release:
     runs-on: ubuntu-latest
-
+    outputs:
+      changelog: ${{ steps.changelog.outputs.changelog }}
+      relbranch: ${{ steps.relbranch.outputs.relbranch }}
     steps:
-      - name: Create/update the short tag to match the release tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          _repo: ${{ github.repository }}
-          _api: https://api.github.com
-          _tag_name: ${{ github.event.release.tag_name }}
-          _tag_sha: ${{ github.sha }}
+      # Check out this repository at the same ref that triggered
+      # this workflow run
+      - uses: actions/checkout@v2
+
+      # Ensure the specified version has a section in CHANGELOG.md
+      - name: Check CHANGELOG.md for '${{ github.event.inputs.version }}'
+        id: changelog
         run: |
-          echo _tag_sha: ${_tag_sha}
-          # Build the pieces of the curl command to use.
-          _a="Authorization: token ${GITHUB_TOKEN}"
-          _b="{\"ref\": \"refs/tags/${_tag_name%%.*}\","
-            _b+=" \"sha\": \"${_tag_sha}\"}"
-          _c="${_api}/repos/${_repo}/git/refs"
-          # Create the short tag, if it doesn't exist yet.
-          curl -sL -XPOST -H "${_a}" -d "${_b}" "${_c}"
-          # Revise curl parts for a different call.
-          _b="{\"sha\": \"${_tag_sha}\"}"
-          _c="${_api}/repos/${_repo}/git/refs/tags/${_tag_name%%.*}"
-          # Update the major version tag, for example "v2".
-          curl -sL -XPATCH -H "${_a}" -d "${_b}" "${_c}"
+          _ver="${{ github.event.inputs.version }}"
+          _changelog=
+          if grep -Fq "## [${_ver}]" docs/CHANGELOG.md; then
+            echo "Found '## [${_ver}]' in CHANGELOG.md :+1:"
+          else
+            echo "FAIL: Did not find '## [${_ver}]' in CHANGELOG.md"
+            exit 1
+          fi
+          # TODO: Make this :point_down: actually work
+          _changelog=":shrug:"
+          echo "Set changelog to '${_changelog}'."
+          echo "::set-output name=changelog::${_changelog}"
+
+      # Check out a branch named, for example, `release-2.1.2`
+      - name: Create the release branch
+        id: relbranch
+        run: |
+          _ver="${{ github.event.inputs.version }}"
+          _relbranch="release-${_ver}"
+          if git checkout -b "${_relbranch}"; then
+            echo "Checked out '${_relbranch}' :+1:"
+          else
+            echo "FAIL: Did not check out '${_relbranch}'"
+            exit 1
+          fi
+          echo "Set relbranch to '${_relbranch}'."
+          echo "::set-output name=relbranch::${_relbranch}"
+
+      # Set the Docker image version in action.yml
+      - name: Set the Docker image version in action.yml
+        id: setversion
+        run: |
+          _ver="${{ github.event.inputs.version }}"
+          if sed -i "s/:latest'/:${_ver}'/" action.yml; then
+            echo "Set OK :+1:"
+            grep "image:" action.yml || echo wut
+          else
+            echo "FAIL: That did not work."
+            exit 1
+          fi
+
+      # Commit and push changes
+      - name: Commit and push changes
+        id: pushbranch
+        run: |
+          _ver="${{ github.event.inputs.version }}"
+          _relbranch="${{ steps.relbranch.outputs.relbranch }}"
+          git config user.name "${GIT_AUTHOR_NAME}"
+          git config user.email "${GIT_AUTHOR_EMAIL}"
+          git add action.yml
+          git commit \
+            -m "Bump action.yml for release v${_ver}."
+          if git push -u origin "${_relbranch}"; then
+            echo "Pushed '${_relbranch}' OK :+1:"
+          else
+            echo "FAIL: That did not work."
+            exit 1
+          fi
+
+      # Create the draft release
+      # https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#get-a-release
+      # https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#create-a-release
+      # https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#get-the-latest-release
+
+      - name: Create the draft release
+        id: mkrel
+        run: |
+          _ver="${{ github.event.inputs.version }}"
+          _tag="v${_ver}"
+          _repo="${{ github.repository }}"
+          _relbranch="${{ steps.relbranch.outputs.relbranch }}"
+          echo "${_ver} ${_tag} ${_repo} ${_relbranch}"
+          _data="{  \"tag_name\": \"${_tag}\",
+                    \"target_commitish\": \"${_relbranch}\",
+                    \"name\": \"${_repo#*/} ${_tag}\",
+                    \"body\": \"words words words\",
+                    \"draft\": true }"
+          echo "${_data}"
+          # Create the draft release
+          echo "${_data}" | \
+          GITHUB_TOKEN=${{ secrets.PAT }} \
+          gh api -X POST /repos/:owner/:repo/releases --input -
