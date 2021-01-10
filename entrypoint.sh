@@ -29,14 +29,16 @@ if [ ! -r "${_config_path}" ]; then
 fi
 
 # Run octodns-sync.
+_logfile="${GITHUB_WORKSPACE}/octodns-sync.log"
+_planfile="${GITHUB_WORKSPACE}/octodns-sync.plan"
+
 echo "INFO: _config_path: ${_config_path}"
 if [ "${_doit}" = "--doit" ]; then
-  script "${GITHUB_WORKSPACE}/octodns-sync.log" -e -c \
-  "octodns-sync --config-file=\"${_config_path}\" \
-  --log-stream-stdout --doit"
+  script "${_logfile}" -e -c \
+  "octodns-sync --config-file=\"${_config_path}\" --doit \
+  >>\"${_planfile}\""
 else
-  script "${GITHUB_WORKSPACE}/octodns-sync.log" -e -c \
+  script "${_logfile}" -e -c \
   "octodns-sync --config-file=\"${_config_path}\" \
-  --log-stream-stdout"
+  >>\"${_planfile}\""
 fi
-
