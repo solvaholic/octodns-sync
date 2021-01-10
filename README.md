@@ -71,6 +71,21 @@ Default `"public.yaml"`.
 
 Default `""` (empty string).
 
+### `add_pr_comment`
+
+(**Required**) Add plan as a comment, when triggered by a pull request?
+
+Default `"No"`.
+
+If you would like to add the plan `octodns-sync` generates as a pull request comment, be sure to also configure `plan_outputs` in your configuration file. For example in `public.yaml`:
+
+```yaml
+manager:
+  plan_outputs:
+    html:
+      class: octodns.provider.plan.PlanHtml
+```
+
 ## Outputs
 
 `octodns-sync` will compare your configuration file to the configurations your providers have, and report any planned changes. For example:

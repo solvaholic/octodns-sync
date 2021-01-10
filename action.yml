@@ -3,6 +3,10 @@
 name: 'octodns-sync'
 description: 'Run github/octodns to deploy your DNS config to any cloud.'
 inputs:
+  add_pr_comment:
+    description: 'Add plan as a comment, when triggered by a pull request?'
+    required: true
+    default: 'No'
   config_path:
     description: 'Path, relative to your repository root, of the config file
                   you would like octodns to use.'
@@ -17,6 +21,8 @@ inputs:
 runs:
   using: 'docker'
   image: 'docker://ghcr.io/solvaholic/octodns-sync:latest'
+  env:
+    ADD_PR_COMMENT: ${{ inputs.add_pr_comment }}
   args:
     - ${{ inputs.config_path }}
     - ${{ inputs.doit }}
