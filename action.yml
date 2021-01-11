@@ -20,7 +20,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/solvaholic/octodns-sync:latest'
+  image: 'docker://ghcr.io/solvaholic/octodns-sync:issue35'
   env:
     ADD_PR_COMMENT: ${{ inputs.add_pr_comment }}
   args:
