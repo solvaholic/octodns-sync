@@ -47,8 +47,8 @@ fi
 if [ "${ADD_PR_COMMENT}" = "Yes" ]; then
   echo "INFO: \$ADD_PR_COMMENT is 'Yes'."
   if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
-    if [ -z "${GITHUB_TOKEN}" ]; then
-      echo "FAIL: \$GITHUB_TOKEN is not set."
+    if [ -z "${PR_COMMENT_TOKEN}" ]; then
+      echo "FAIL: \$PR_COMMENT_TOKEN is not set."
       exit 1
     fi
   else
@@ -66,7 +66,7 @@ $(cat "${_planfile}")
 ${_footer}"
   # Post the comment
   _user="fakename" \
-  _token="${GITHUB_TOKEN}" \
+  _token="${PR_COMMENT_TOKEN}" \
   _body="${_body}" \
   GITHUB_EVENT_PATH="${GITHUB_EVENT_PATH}" \
   python3 -c "import requests, os, json
