@@ -30,10 +30,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Publish
-        uses: solvaholic/octodns-sync@v2
+        uses: solvaholic/octodns-sync@latest
         with:
           config_path: public.yaml
-          doit: --doit
+          doit: '--doit'
 ```
 
 ## Inputs
@@ -86,26 +86,46 @@ manager:
       class: octodns.provider.plan.PlanHtml
 ```
 
+### `pr_comment_token`
+
+(**Required**) Provide a token to use, if you set `add_pr_comment` to "Yes".
+
+Default `"Not set"`.
+
 ## Outputs
 
-`octodns-sync` will compare your configuration file to the configurations your providers have, and report any planned changes. For example:
+`octodns-sync` will compare your configuration file to the configurations your providers have, and report any planned changes. The command logs this output in the workflow run log.
 
-```text
-********************************************************************************
-* example.org.
-********************************************************************************
-* route53 (Route53Provider)
-*   Update
-*     <CnameRecord CNAME 3600, mail.example.org., before.example.org.> ->
-*     <CnameRecord CNAME 3600, mail.example.org., after.example.org.> (config)
-*   Create <ARecord A 3600, after.example.org., ['192.168.0.33']> (config)
-*   Create <CaaRecord CAA 3600, after.example.org., ['0 issue "letsencrypt.org"']> (config)
-*   Delete <ARecord A 3600, before.example.org., ['192.168.0.33']>
-*   Delete <CaaRecord CAA 3600, before.example.org., ['0 issue "letsencrypt.org"']>
-*   Update
-*     <CnameRecord CNAME 3600, www.example.org., before.example.org.> ->
-*     <CnameRecord CNAME 3600, www.example.org., after.example.org.> (config)
-*   Summary: Creates=2, Updates=2, Deletes=2, Existing Records=8
+That same log is saved to `$GITHUB_WORKSPACE/octodns-sync.log`.
+
+If you have configured `plan_outputs` for **octodns**, PlanHtml or PlanMarkdown output will be written to `$GITHUB_WORKSPACE/octodns-sync.plan`.
+
+### Add pull request comment
+
+If you would also like this action to add the `octodns-sync` plan to a pull request comment, configure `plan_outputs` in your **octodns** configuration, for example `public.yml`:
+
+```yaml
+manager:
+  plan_outputs:
+    html:
+      class: octodns.provider.plan.PlanHtml
+```
+
+Then configure your workflow to run this action on the `pull_request` event, set `add_pr_comment` to "Yes", and provide an API token. For example:
+
+```yaml
+on:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: solvaholic/octodns-sync@latest
+        with:
+          config_path: public.yaml
+          add_pr_comment: 'Yes'
+          pr_comment_token: '${{ github.token }}'
 ```
 
 ## Run locally
