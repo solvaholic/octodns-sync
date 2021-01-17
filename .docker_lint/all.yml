@@ -1,7 +1,0 @@
----
-profile:
-  name: "docker_lint policies"
-  description: "Include relevant docker_lint configurations."
-  includes:
-    - security_rules.yml
-    - image_health.yml
