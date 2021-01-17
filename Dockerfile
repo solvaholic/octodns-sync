@@ -4,13 +4,21 @@ FROM python:3.7-slim
 
 LABEL name="solvaholic/octodns-sync" \
       version="add-make" \
-      maintainer="solvaholic <solvaholic@users.noreply.github.com>"
+      maintainer="solvaholic on GitHub"
 
+ENV APP_UID 1501
+ENV APP_GID 1501
+
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
+
+COPY requirements.txt /requirements.txt
+RUN chmod 644 /requirements.txt
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
 
-COPY requirements.txt /requirements.txt
-
+RUN groupadd -g ${APP_GID} octodns \
+    && useradd -g octodns -u ${APP_UID} -M octodns
 RUN /entrypoint.sh
 
+# USER octodns
 ENTRYPOINT ["/entrypoint.sh"]

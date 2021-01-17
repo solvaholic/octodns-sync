@@ -12,7 +12,7 @@ srcdir = .
 default: build
 
 lint: lint-dockerfile-lint lint-super-linter
-build: lint docker-build
+build: lint-dockerfile-lint docker-build
 
 lint-dockerfile-lint:
 	@echo "Checking container image policies..."

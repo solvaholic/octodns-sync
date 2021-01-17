@@ -51,27 +51,3 @@ line_rules:
         message: "installing SSH in a container is not recommended"
         description: "Do you really need SSH in this image?"
         reference_url: "https://github.com/jpetazzo/nsenter"
-
-  USER:
-    paramSyntaxRegex: /^[a-z0-9_][a-z0-9_]{0,40}$/
-    rules:
-      -
-        label: "no_run_as_root"
-        regex: /root/
-        level: "warn"
-        message: "running as root is not recommended"
-        description: "Specify a USER other than 'root' for your
-                      container image."
-        reference_url: "https://medium.com/@mccode/processes-in-containers-should-not-run-as-root-2feae3f0df3b"
-
-required_instructions: 
-  - 
-    instruction: "USER"
-    count: 1
-    level: "warn"
-    message: "Wrong number of 'USER' instructions"
-    description: "The process(es) within the container may run as
-                  root and 'RUN' instructions my be run as root"
-    reference_url: 
-      - "https://docs.docker.com/engine/reference/builder/"
-      - "#user"
