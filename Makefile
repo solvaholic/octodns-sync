@@ -1,11 +1,11 @@
 #!/usr/bin/make -f
 
 SHELL = /bin/bash
-NS = solvaholic/octodns-sync
 PORTS = -p 1313:1313
 VOLUMES = -v "$(realpath ./orgdocs)":/src
-NAME = hugo-server
-IMAGE = solvaholic/octodns-sync:local
+IMAGE = solvaholic/octodns-sync
+IMAGE_VER = local
+IMAGE_TAG = ${IMAGE}:${IMAGE_VER}
 
 srcdir = .
 
@@ -31,15 +31,19 @@ lint-super-linter:
 	@echo "All the things linted!"
 
 docker-build:
-	@echo "Building ${IMAGE} image..."
-	@docker build -t ${IMAGE} .
-	@echo "${IMAGE} image built!"
-	@docker images ${IMAGE}
+	@echo "Building ${IMAGE_TAG} image..."
+	@docker build \
+		--build-arg image_version="${IMAGE_VER}" \
+		-t ${IMAGE_TAG} .
+	@echo "${IMAGE_TAG} image built!"
+	@docker images ${IMAGE_TAG}
 
 inspect-labels:
-	@echo "Inspecting container image labels..."
-	@echo "maintainer set to..."
-	@docker inspect --format '{{ index .Config.Labels "maintainer" }}' \
-			${NAME}
+	@echo "Inspecting ${IMAGE_TAG} labels..."
+	@docker inspect --format \
+		" Name: {{ index .Config.Labels \"name\" }}" ${IMAGE_TAG}
+	@docker inspect --format \
+		" Version: {{ index .Config.Labels \"version\" }}" ${IMAGE_TAG}
+	@docker inspect --format \
+		" Maintainer: {{ index .Config.Labels \"maintainer\" }}" ${IMAGE_TAG}
 	@echo "Container image labels inspected!"
-

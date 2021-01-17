@@ -72,7 +72,9 @@ jobs:
             exit 1
           fi
 
-          if docker build . -q -t "${_image_tag}"; then
+          if docker build . -q \
+            --build-arg image_version="${_image_ver}" \
+            -t "${_image_tag}"; then
             echo "Built '${_image_tag}' OK."
           else
             echo "FAIL: Failed to build '${_image_tag}'."

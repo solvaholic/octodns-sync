@@ -1,9 +1,10 @@
 # Run octodns-sync with your config.
 
 FROM python:3.7-slim
+ARG image_version
 
 LABEL name="solvaholic/octodns-sync" \
-      version="add-make" \
+      version="${image_version}" \
       maintainer="solvaholic on GitHub"
 
 ENV APP_UID 1501
