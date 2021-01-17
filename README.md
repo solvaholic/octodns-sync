@@ -96,7 +96,7 @@ Default `"Not set"`.
 
 `octodns-sync` will compare your configuration file to the configurations your providers have, and report any planned changes. The command logs this output in the workflow run log.
 
-That same log is saved to `$GITHUB_WORKSPACE/octodns-sync.log`.
+That same output is saved to `$GITHUB_WORKSPACE/octodns-sync.log`.
 
 If you have configured `plan_outputs` for **octodns**, PlanHtml or PlanMarkdown output will be written to `$GITHUB_WORKSPACE/octodns-sync.plan`.
 
