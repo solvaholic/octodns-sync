@@ -13,7 +13,8 @@ line_rules:
         regex: /http\:\/\/.*/
         level: "warn"
         message: "ADD is using a non-HTTPS url as source"
-        description: "Using a URL without HTTPS can lead to MITM attacks on your infrastructure."
+        description: "Using a URL without HTTPS can lead to MITM
+                      attacks on your infrastructure."
 
   RUN:
     paramSyntaxRegex: /.+/
@@ -23,7 +24,8 @@ line_rules:
         regex: /http\:\/\/.*/g
         level: "warn"
         message: "RUN is referencing a non-HTTPS url"
-        description: "Using a URL without HTTPS can lead to MITM attacks on your infrastructure."
+        description: "Using a URL without HTTPS can lead to MITM
+                      attacks on your infrastructure."
 
       -
         label: "no_run_with_sudo"
@@ -48,7 +50,7 @@ line_rules:
         level: "warn"
         message: "installing SSH in a container is not recommended"
         description: "Do you really need SSH in this image?"
-        reference_url: "https://github.com/jpetazzo/nsenter"	
+        reference_url: "https://github.com/jpetazzo/nsenter"
 
   USER:
     paramSyntaxRegex: /^[a-z0-9_][a-z0-9_]{0,40}$/
@@ -58,7 +60,8 @@ line_rules:
         regex: /root/
         level: "warn"
         message: "running as root is not recommended"
-        description: "Specify a USER other than 'root' for your container image."
+        description: "Specify a USER other than 'root' for your
+                      container image."
         reference_url: "https://medium.com/@mccode/processes-in-containers-should-not-run-as-root-2feae3f0df3b"
 
 required_instructions: 
@@ -67,7 +70,8 @@ required_instructions:
     count: 1
     level: "warn"
     message: "Wrong number of 'USER' instructions"
-    description: "The process(es) within the container may run as root and 'RUN' instructions my be run as root"
+    description: "The process(es) within the container may run as
+                  root and 'RUN' instructions my be run as root"
     reference_url: 
       - "https://docs.docker.com/engine/reference/builder/"
       - "#user"
