@@ -1,0 +1,52 @@
+---
+profile:
+  name: "Image Health"
+  description: "Set of rules focus on .. idk"
+
+line_rules:
+
+  FROM:
+    paramSyntaxRegex: /.+/
+    rules:
+      -
+        label: "is_latest_tag"
+        regex: /latest/
+        level: "info"
+        message: "base image uses 'latest' tag"
+        description: "using the 'latest' tag may cause unpredictable builds. It is recommended that a specific tag is used in the FROM line."
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"
+      -
+        label: "no_tag"
+        regex: /[:]/
+        level: "warn"
+        inverse_rule: true
+        message: "No tag is used"
+        description: "No tag is used"
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#from"
+
+  LABEL:
+    defined_namevals:
+      Maintainer:
+        valueRegex: /([\w]+)./
+        message: "Label 'Maintainer' is missing or has invalid format"
+        level: "warn"
+        required: true
+        reference_url:
+          - "https://docs.docker.com/engine/reference/builder/"
+          - "#maintainer-deprecated"
+
+  HEALTHCHECK:
+    paramSyntaxRegex: /.+/
+    rules:
+      -
+        label: "uses_curl"
+        regex: /curl/
+        level: "warn"
+        message: "health check uses 'curl'"
+        description: "using 'curl' for this is bad, mm-kay. Use the application's native status check tooling."
+        reference_url: 
+          - "https://blog.sixeyed.com/docker-healthchecks-why-not-to-use-curl-or-iwr/"
