@@ -40,6 +40,7 @@ jobs:
       # Run Linter against Dockerfile
       - name: Lint Dockerfile
         run: |
-          npm install -g dockerfile_lint
-          dockerfile_lint --rulefile ".dockerfile_lint/all.yml" \
-                          --dockerfile "Dockerfile"
+          npm install dockerfile_lint
+          "$(npm root)/dockerfile_lint/bin/dockerfile_lint" \
+              --rulefile ".dockerfile_lint/all.yml" \
+              --dockerfile "Dockerfile"
