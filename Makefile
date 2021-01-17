@@ -1,11 +1,9 @@
 #!/usr/bin/make -f
 
 SHELL = /bin/bash
-PORTS = -p 1313:1313
-VOLUMES = -v "$(realpath ./orgdocs)":/src
-IMAGE = solvaholic/octodns-sync
-IMAGE_VER = local
-IMAGE_TAG = ${IMAGE}:${IMAGE_VER}
+IMAGE ?= solvaholic/octodns-sync
+IMAGE_VER ?= local
+IMAGE_TAG ?= ${IMAGE}:${IMAGE_VER}
 
 srcdir = .
 
