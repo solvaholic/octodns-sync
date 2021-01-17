@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ([#36](https://github.com/solvaholic/octodns-sync/pull/36)) Save `octodns-sync` plan output to a file.
 - ([#36](https://github.com/solvaholic/octodns-sync/pull/36)) Add `octodns-sync` plan output to a pull request comment.
+- ([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add dockerfile_lint to Lint Code Base workflow.
+- ([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add labels to container image: `name`, `version`, `maintainer`.
 
 ### Changed
 
