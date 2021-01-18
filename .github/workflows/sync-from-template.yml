@@ -2,24 +2,28 @@
 #
 # - Run this workflow to pull changes from the template repository.
 # 
-#   - Clone this repository. Check out a branch.
-#   - Copy files from the template onto this clone.
-#   - Push the branch to this repository.
-#   - Create a pull request in this repository.
+#   - Clone this repository. Check out a branch
+#   - Copy files from the template onto this clone
+#   - Push the branch to this repository
+#   - Create a pull request in this repository
 #
 name: Sync changes from template
 
 # TODO:
-# - Switch to gh. Check https://github.com/cli/cli/issues/297 for updates.
+# - Switch to gh. Check https://github.com/cli/cli/issues/297 for updates
 
 on:
+  # Run at 0517 UTC each Friday
   schedule:
-    # Run on the 30th minute of each hour
     - cron: "17 5 * * 5"
+
+  # Run when this file changes
   push:
-    # Also run when this file changes.
     paths:
       - .github/workflows/sync-from-template.yml
+
+  # Run when manually triggered
+  workflow_dispatch:
 
 env:
   BASE_BRANCH: main
@@ -31,14 +35,14 @@ env:
 
 jobs:
   sync-from-template:
-    # Do not run on the template repository itself.
+    # Do not run on the template repository itself
     if: github.repository != 'solvaholic/template'
     name: Sync changes from solvaholic/template
     runs-on: ubuntu-latest
     continue-on-error: true
 
     steps:
-      # Clone the template repository.
+      # Clone the template repository
       - name: Check out template repository
         uses: actions/checkout@v2
         with:
@@ -46,7 +50,7 @@ jobs:
           token: ${{ github.token }}
           path: ${{ env.REPO_TEMPLATE }}
 
-      # Clone the target repository. Check out a branch.
+      # Clone the target repository. Check out a branch
       - name: Check out ${{ github.repository }}
         uses: actions/checkout@v2
         with:
@@ -61,7 +65,7 @@ jobs:
             "remotes/origin/${HEAD_BRANCH}" || \
           git -C "${THIS_REPO}" checkout -b "${HEAD_BRANCH}"
 
-      # Copy files from the template onto the target clone.
+      # Copy files from the template onto the target clone
       - name: Copy template contents
         run: |
           _files="$(find ${REPO_TEMPLATE} \
@@ -74,7 +78,7 @@ jobs:
           for _file in ${_files}; do
             _src="${_file}"
             _dst="${THIS_REPO}/${_file#${REPO_TEMPLATE}/}"
-            # TODO: Find a more robust / elegant way to get this :point_down:.
+            # TODO: Find a more robust / elegant way to get this :point_down:
             _dst="${_dst%/*}/"
             mkdir -p "${_dst}"
             echo "INFO: Copy '${_src}' to '${_dst}'."
@@ -82,7 +86,7 @@ jobs:
           done
           git -C "${THIS_REPO}" diff
 
-      # Commit changes, if there are any.
+      # Commit changes, if there are any
       - name: Commit changes, if any
         run: |
           git -C ${THIS_REPO} config user.name "${GIT_AUTHOR_NAME}"
@@ -92,11 +96,11 @@ jobs:
           git -C ${THIS_REPO} commit \
             -m "Sync from template@${{ github.sha }}"
 
-      # Push the branch to the target repository.
+      # Push the branch to the target repository
       - name: Push topic branch
         run: git -C ${THIS_REPO} push -u origin "${HEAD_BRANCH}"
 
-      # Create a pull request in the target repository.
+      # Create a pull request in the target repository
       - name: Create pull request
         env:
           GITHUB_TOKEN: ${{ github.token }}
