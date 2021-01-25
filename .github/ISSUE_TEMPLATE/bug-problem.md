@@ -26,7 +26,6 @@ assignees: ''
 <!--- reproduce this bug. Include code to reproduce, if relevant -->
 1.
 1.
-1.
 
 ## Context
 <!--- How has this bug affected you? What were you trying to accomplish? -->
