@@ -1,7 +1,7 @@
 # action.yml
 # https://help.github.com/en/actions/building-actions/metadata-syntax-for-github-actions
 name: 'octodns-sync'
-description: 'Run github/octodns to deploy your DNS config to any cloud.'
+description: 'Run octodns/octodns to deploy your DNS config to any cloud.'
 inputs:
   add_pr_comment:
     description: 'Add plan as a comment, when triggered by a pull request?'

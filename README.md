@@ -1,6 +1,6 @@
 # octodns-sync
 
-This action runs `octodns-sync` from [github/octodns](https://github.com/github/octodns) to deploy your DNS config to any cloud.
+This action runs `octodns-sync` from [octodns/octodns](https://github.com/octodns/octodns) to deploy your DNS config to any cloud.
 
 octodns allows you to manage your DNS records in a portable format and publish changes across different DNS providers. It is extensible and customizable.
 
