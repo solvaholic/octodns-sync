@@ -7,11 +7,9 @@ name: Lint Code Base
 #
 
 on:
-  # Run on every push, except to main
-  # (Configure branch protection to require this check)
-  push:
-    branches-ignore:
-      - 'main'
+  # Run on pull request open, reopen, and synchronize
+  pull_request:
+     branches: [main]
 
   # Run when manually triggered
   workflow_dispatch:
