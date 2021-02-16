@@ -43,6 +43,14 @@ else
   >>\"${_planfile}\""
 fi
 
+# Exit 1 if octodns-sync exited non-zero.
+if tail --lines=1 "$_logfile" | \
+grep --quiet --fixed-strings --invert-match \
+'[COMMAND_EXIT_CODE="0"]'; then
+  echo "FAIL: octodns-sync exited with an error."
+  exit 1
+fi
+
 # If ADD_PR_COMMENT is Yes, add comment to PR.
 if [ "${ADD_PR_COMMENT}" = "Yes" ]; then
   echo "INFO: \$ADD_PR_COMMENT is 'Yes'."

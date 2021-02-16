@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - ([#34](https://github.com/solvaholic/octodns-sync/issues/34)) Deleted the `v99` and `v99.0.0` tags.
+- ([#40](https://github.com/solvaholic/octodns-sync/issues/40)) Exit 1 when octodns-sync exits non-zero.
 
 ### Security
 
