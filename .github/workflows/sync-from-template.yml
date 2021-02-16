@@ -38,7 +38,7 @@ jobs:
     # Do not run on the template repository itself
     if: github.repository != 'solvaholic/template'
     name: Sync changes from solvaholic/template
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     continue-on-error: true
 
     steps:
