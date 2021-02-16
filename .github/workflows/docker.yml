@@ -22,7 +22,7 @@ env:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     outputs:
       fullref: ${{ steps.gettagver.outputs.fullref }}
@@ -132,7 +132,7 @@ jobs:
     env:
       _tag_pushed: "${{ needs.build-and-push.outputs.tagpushed }}"
       _short_ref: "${{ needs.build-and-push.outputs.shortref }}"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     outputs:
       actionat: ${{ steps.findaction.outputs.actionat }}
