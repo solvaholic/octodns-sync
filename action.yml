@@ -23,8 +23,8 @@ inputs:
     default: 'Not set'
 
 runs:
-  using: 'docker'
-  image: 'docker://ghcr.io/solvaholic/octodns-sync:latest'
+  using: 'ubuntu-latest'
+  main: 'octodns-action.sh'
   env:
     ADD_PR_COMMENT: ${{ inputs.add_pr_comment }}
     PR_COMMENT_TOKEN: ${{ inputs.pr_comment_token }}
