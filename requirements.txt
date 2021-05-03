@@ -24,4 +24,4 @@ s3transfer==0.3.3
 setuptools==44.1.1
 six==1.15.0
 transip==2.1.2
-octodns==0.9.11
+octodns==0.9.12
