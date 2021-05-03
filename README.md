@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Publish
-        uses: solvaholic/octodns-sync@latest
+        uses: solvaholic/octodns-sync@main
         with:
           config_path: public.yaml
           doit: '--doit'
@@ -126,22 +126,4 @@ jobs:
           config_path: public.yaml
           add_pr_comment: 'Yes'
           pr_comment_token: '${{ github.token }}'
-```
-
-## Run locally
-
-```sh
-_image=ghcr.io/solvaholic/octodns-sync:latest
-_config_path=public.yaml    # Path to config file in your repository
-_env_path=.env              # .env file with secret keys and stuff
-_volume="$(realpath .)"     # Path Docker will mount at $_mountpoint
-_mountpoint=/config         # Mountpoint for your config directory
-
-# Test changes:
-docker run --rm -v "${_volume}":${_mountpoint} \
---env-file ${_env_path} ${_image} ${_mountpoint#/}/${_config_path}
-
-# Really do it:
-docker run --rm -v "${_volume}":${_mountpoint} \
---env-file ${_env_path} ${_image} ${_mountpoint#/}/${_config_path} --doit
 ```

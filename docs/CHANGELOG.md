@@ -11,11 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ([#36](https://github.com/solvaholic/octodns-sync/pull/36)) Save `octodns-sync` plan output to a file.
 - ([#36](https://github.com/solvaholic/octodns-sync/pull/36)) Add `octodns-sync` plan output to a pull request comment.
-- ([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add dockerfile_lint to Lint Code Base workflow.
-- ([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add labels to container image: `name`, `version`, `maintainer`.
+- ([#NNN]()) Add **octodns_ref** input, permitting user to specify a release tag or branch of octodns to use.
+- ~([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add dockerfile_lint to Lint Code Base workflow.~
+- ~([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add labels to container image: `name`, `version`, `maintainer`.~
 
 ### Changed
 
+- Change default **octodns/octodns** from v0.9.11 to v0.9.12.
 - ([#30](https://github.com/solvaholic/octodns-sync/issues/30), [#32](https://github.com/solvaholic/octodns-sync/issues/32)) Improve the administrative release workflow to facilitate consistent releasing.
 
 ### Deprecated
