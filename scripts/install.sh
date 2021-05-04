@@ -9,7 +9,10 @@ if [[ "$_ver" = v* ]]; then
   pip install "octodns==${_ver#v}" -r requirements.txt
 else
   # Assume input 'version' is a Git ref in octodns/octodns
-  git clone --single-branch --branch "$_ver" --no-tags \
-  https://github.com/octodns/octodns.git octodns-src
-  pip install ./octodns-src -r ./octodns-src/requirements.txt
+  if git clone --single-branch --branch "$_ver" --no-tags \
+  https://github.com/octodns/octodns.git octodns-src; then
+    pip install ./octodns-src -r ./octodns-src/requirements.txt
+  else
+    exit 1
+  fi
 fi
