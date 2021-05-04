@@ -10,6 +10,6 @@ if [[ "$_ver" = v* ]]; then
 else
   # Assume input 'version' is a Git ref in octodns/octodns
   git clone --single-branch --branch "$_ver" --no-tags \
-  https://github.com/octodns/octodns.git ./octodns-src
+  https://github.com/octodns/octodns.git octodns-src
   pip install ./octodns-sync -r ./octodns-src/requirements.txt
 fi
