@@ -5,29 +5,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.2.0] - Unreleased
+
+### Known issues
+
+- ([#57](https://github.com/solvaholic/octodns-sync/issues/57)) [2.2.x] Running octodns-sync twice in one job fails
+
+### Added
+
+- ([#53](https://github.com/solvaholic/octodns-sync/pull/53)) Add **octodns_ref** input, permitting user to specify a release tag or branch of octodns to use.
+- ([#??](https://github.com/solvaholic/octodns-sync/pulls))
+
+### Changed
+
+Change default **octodns/octodns** from v0.9.11 to v0.9.12.
+
+### Deprecated
+### Removed
+
+([#53](https://github.com/solvaholic/octodns-sync/pull/53)) Removed Docker dependency :tada:
+
+### Fixed
+### Security
+
+## [2.1.3] - 2021-05-08
+
+### Known issues
+
+solvaholic/octodns-sync release 2.1.3 uses octodns 0.9.11 and outdated versions of some octodns and provider dependencies.
 
 ### Added
 
 - ([#36](https://github.com/solvaholic/octodns-sync/pull/36)) Save `octodns-sync` plan output to a file.
 - ([#36](https://github.com/solvaholic/octodns-sync/pull/36)) Add `octodns-sync` plan output to a pull request comment.
-- ([#53](https://github.com/solvaholic/octodns-sync/pull/53)) Add **octodns_ref** input, permitting user to specify a release tag or branch of octodns to use.
-- ~([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add dockerfile_lint to Lint Code Base workflow.~
-- ~([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add labels to container image: `name`, `version`, `maintainer`.~
+- ([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add dockerfile_lint to Lint Code Base workflow.
+- ([#37](https://github.com/solvaholic/octodns-sync/pull/37)) Add labels to container image: `name`, `version`, `maintainer`.
 
 ### Changed
 
-- Change default **octodns/octodns** from v0.9.11 to v0.9.12.
 - ([#30](https://github.com/solvaholic/octodns-sync/issues/30), [#32](https://github.com/solvaholic/octodns-sync/issues/32)) Improve the administrative release workflow to facilitate consistent releasing.
 
-### Deprecated
-### Removed
 ### Fixed
 
 - ([#34](https://github.com/solvaholic/octodns-sync/issues/34)) Deleted the `v99` and `v99.0.0` tags.
 - ([#40](https://github.com/solvaholic/octodns-sync/issues/40)) Exit 1 when octodns-sync exits non-zero.
-
-### Security
 
 ## [2.1.2] - 2020-12-28
 
