@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [2.1.3] - 2021-05-08
+
+### Added
 
 - ([#36](https://github.com/solvaholic/octodns-sync/pull/36)) Save `octodns-sync` plan output to a file.
 - ([#36](https://github.com/solvaholic/octodns-sync/pull/36)) Add `octodns-sync` plan output to a pull request comment.
@@ -18,14 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - ([#30](https://github.com/solvaholic/octodns-sync/issues/30), [#32](https://github.com/solvaholic/octodns-sync/issues/32)) Improve the administrative release workflow to facilitate consistent releasing.
 
-### Deprecated
-### Removed
 ### Fixed
 
 - ([#34](https://github.com/solvaholic/octodns-sync/issues/34)) Deleted the `v99` and `v99.0.0` tags.
 - ([#40](https://github.com/solvaholic/octodns-sync/issues/40)) Exit 1 when octodns-sync exits non-zero.
-
-### Security
 
 ## [2.1.2] - 2020-12-28
 
