@@ -90,8 +90,6 @@ jobs:
       # Update short version tags, for example v2 and v2.2
       - name: Update major and minor version tags
         id: roll-tags
-        with:
-          working-directory: ${{ github.workspace }}
         run: |
           # Set up variables.
           TAG="${INPUT_TAG:-${GITHUB_REF#refs/tags/}}" # v2.2.0
