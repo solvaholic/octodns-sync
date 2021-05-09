@@ -26,7 +26,7 @@ env:
 jobs:
   publish:
     name: Publish DNS config from main
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - name: Publish
@@ -40,7 +40,7 @@ jobs:
 
 ### Secrets
 
-(**Required**) To authenticate with your DNS provider, this action uses
+To authenticate with your DNS provider, this action uses
 [encrypted secrets](https://help.github.com/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#about-encrypted-secrets)
 you've configured on your repository. For example, if you use Amazon
 Route53, [create these secrets](https://help.github.com/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets)
@@ -59,38 +59,37 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.route53-aws-secret-access-key }}
 ```
 
-### `config-path`
+### `config_path`
 
-(**Required**) Path, relative to your repository root, of the config file you would like octodns to use.
+Path, relative to your repository root, of the config file you would like octodns to use.
 
 Default `"public.yaml"`.
 
 ### `doit`
 
-(**Optional**) Really do it? Set "--doit" to do it; Any other string to not do it.
+Really do it? Set "--doit" to do it; Any other string to not do it.
 
 Default `""` (empty string).
 
 ### `add_pr_comment`
 
-(**Required**) Add plan as a comment, when triggered by a pull request?
+Add plan as a comment, when triggered by a pull request? Set "Yes" to do it.
 
 Default `"No"`.
 
-If you would like to add the plan `octodns-sync` generates as a pull request comment, be sure to also configure `plan_outputs` in your configuration file. For example in `public.yaml`:
-
-```yaml
-manager:
-  plan_outputs:
-    html:
-      class: octodns.provider.plan.PlanHtml
-```
+If you would like to add the plan `octodns-sync` generates as a pull request comment, be sure to also read [_Add pull request comment_](#add-pull-request-comment) below.
 
 ### `pr_comment_token`
 
-(**Required**) Provide a token to use, if you set `add_pr_comment` to "Yes".
+Provide a token to use, if you set `add_pr_comment` to "Yes".
 
 Default `"Not set"`.
+
+### `octodns_ref`
+
+Select a release tag or a branch of octodns to use. For example "v0.9.12" or "awesome-feature".
+
+Default `"v0.9.12"`.
 
 ## Outputs
 
@@ -102,7 +101,7 @@ If you have configured `plan_outputs` for **octodns**, PlanHtml or PlanMarkdown 
 
 ### Add pull request comment
 
-If you would also like this action to add the `octodns-sync` plan to a pull request comment, configure `plan_outputs` in your **octodns** configuration, for example `public.yml`:
+If you would like this action to add the `octodns-sync` plan to a pull request comment, configure `plan_outputs` in your **octodns** configuration, for example `public.yml`:
 
 ```yaml
 manager:
