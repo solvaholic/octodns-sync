@@ -27,7 +27,7 @@ env:
 
 jobs:
   create-release:
-    if: ${{ github.event_name != 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-20.04
     outputs:
       changelog: ${{ steps.changelog.outputs.changelog }}
@@ -80,7 +80,7 @@ jobs:
   # When a release is published, update short
   # version tags, for example v2 and v2.2
   update-tags:
-    if: ${{ github.event_name != 'release' }}
+    if: ${{ github.event_name == 'release' }}
     runs-on: ubuntu-20.04
     steps:
       # Check out this repository at the same ref that triggered
