@@ -9,11 +9,10 @@ name: Lint Code Base
 on:
   # Run on pull request open, reopen, and synchronize
   pull_request:
-     branches: [main]
+    branches: [main]
 
   # Run when manually triggered
   workflow_dispatch:
-
 
 jobs:
   build:
@@ -26,14 +25,11 @@ jobs:
       # Checkout the code base
       - name: Checkout Code
         uses: actions/checkout@v2
-        with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
-          fetch-depth: 0
 
-      # Run Linter against code base
-      - name: Lint Code Base
-        uses: docker://ghcr.io/github/super-linter:v3
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Run yamllint to lint YAML
+      - name: Lint YAML files
+        run: yamllint --no-warnings ./
+
+      # Run shellcheck to lint shell scripts
+      - name: Lint shell scripts
+        run: shellcheck ./scripts/*.sh
