@@ -77,7 +77,7 @@ jobs:
           GITHUB_TOKEN=${{ secrets.PAT }} \
           gh api -X POST /repos/:owner/:repo/releases --input -
 
-  # When a release is published, update short 
+  # When a release is published, update short
   # version tags, for example v2 and v2.2
   update-tags:
     if: ${{ github.event_name != 'release' }}
