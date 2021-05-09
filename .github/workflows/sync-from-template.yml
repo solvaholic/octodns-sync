@@ -1,7 +1,7 @@
 ---
 #
 # - Run this workflow to pull changes from the template repository.
-# 
+#
 #   - Clone this repository. Check out a branch
 #   - Copy files from the template onto this clone
 #   - Push the branch to this repository
