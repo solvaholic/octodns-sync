@@ -4,25 +4,21 @@ TODO: Make this simpler and more reliable.
 
 ## Prerequisites
 
-- [ ] Identify the release version, for example `v2.1.2`
+- [ ] Identify the release version, for example `2.2.1`
+- [ ] Create a corresponding branch from `main`, for example `release-2.2.1`
+- [ ] Push your branch
 
-## Run [the _Create a release_ workflow](https://github.com/solvaholic/octodns-sync/actions)
+## Run [the _Create a release_ workflow](https://github.com/solvaholic/octodns-sync/actions) from your branch
 
-Which will preform these tasks:
+Which will perform these tasks:
 
 - [ ] Ensure the specified version has a section in CHANGELOG.md
-- [ ] Check out a branch named, for example, `release-2.1.2`
-- [ ] Set the Docker image version in action.yml
-- [ ] Commit and push changes
 - [ ] Create the draft release
 
 ## Finalize and publish [the release](https://github.com/solvaholic/octodns-sync/releases)
 
-Which will push a tag and trigger [the build, push, and test workflow](https://github.com/solvaholic/octodns-sync/actions?query=workflow%3A%22Build%2C+push%2C+and+test+container%22). That workflow will:
-
-- [ ] Push the Docker image with the desired release tag
+Which will push the release tag. If you'd like to publish this release to the marketplace, be sure to check that box.
 
 ## Clean up
 
 - [ ] Delete any [branches](https://github.com/solvaholic/octodns-sync/branches) you're done with
-- [ ] Delete any [untagged container images](https://github.com/users/solvaholic/packages/container/octodns-sync/versions?filters%5Bversion_type%5D=untagged)

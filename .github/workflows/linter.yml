@@ -26,6 +26,9 @@ jobs:
       # Checkout the code base
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
 
       # Run Linter against code base
       - name: Lint Code Base
@@ -34,11 +37,3 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Run Linter against Dockerfile
-      - name: Lint Dockerfile
-        run: |
-          npm install dockerfile_lint
-          "$(npm root)/dockerfile_lint/bin/dockerfile_lint" \
-              --rulefile ".dockerfile_lint/all.yml" \
-              --dockerfile "Dockerfile"
