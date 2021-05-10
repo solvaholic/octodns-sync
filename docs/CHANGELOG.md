@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+
+- ([#51](https://github.com/solvaholic/octodns-sync/issues/51)) When adding plan output to a pull request comment, `comment.sh` assumed GITHUB_SHA had been checked out.
+
 ### Security
 
 ## [2.2.0] - 2021-05-09
