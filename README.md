@@ -132,3 +132,5 @@ jobs:
           add_pr_comment: 'Yes'
           pr_comment_token: '${{ github.token }}'
 ```
+
+Please note: This configuration will add a new comment to the pull request each time it's triggered. To find out how to change that, check out [issue #41](https://github.com/solvaholic/octodns-sync/issues/41) and **[docs/add_pr_comment.md](docs/add_pr_comment.md)**.
