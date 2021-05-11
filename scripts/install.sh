@@ -13,20 +13,18 @@ fi
 # Set some variables
 _ver="$OCTODNS_REF"
 _src="$(mktemp -d)"
-_api="repos/octodns/octodns/git/matching-refs"
+_api="https://api.github.com/repos/octodns/octodns/git/matching-refs"
+_hdr="Accept: application/vnd.github.v3+json"
 _via=""
-
-# Authenticate gh
-echo "${GITHUB_TOKEN}" | gh auth login --with-token
 
 # Is _ver a valid pip version or Git ref?
 if pip download -q "octodns==${_ver#v}"; then
   # _ver is a PyPI version
   _via=pip
-elif gh api --silent "${_api}/tags/${_ver}"; then
+elif curl -s -H "${_hdr}" "${_api}/tags/${_ver}"; then
   # _ver is a tag in octodns/octodns
   _via=git
-elif gh api --silent "${_api}/heads/${_ver}"; then
+elif curl -s -H "${_hdr}" "${_api}/heads/${_ver}"; then
   # _ver is a branch in octodns/octodns
   _via=git
 else
