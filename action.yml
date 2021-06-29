@@ -25,6 +25,10 @@ inputs:
     description: 'Provide a token to use, if you set add_pr_comment to Yes.'
     required: true
     default: 'Not set'
+outputs:
+  plan:
+    description: 'Planned changes, if configured in octodns'
+    value: ${{ steps.run.outputs.plan}}
 
 runs:
   using: 'composite'

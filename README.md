@@ -93,11 +93,17 @@ Default `"v0.9.12"`.
 
 ## Outputs
 
+### plan
+
+If you have configured `plan_outputs` for **octodns**, PlanHtml or PlanMarkdown output will be written to `$GITHUB_WORKSPACE/octodns-sync.plan`.
+
+For convenience, this file is output by this action as the `plan` output if you need to use it in subsequent steps.
+
+### Log file
+
 `octodns-sync` will compare your configuration file to the configurations your providers have, and report any planned changes. The command logs this output in the workflow run log.
 
 That same output is saved to `$GITHUB_WORKSPACE/octodns-sync.log`.
-
-If you have configured `plan_outputs` for **octodns**, PlanHtml or PlanMarkdown output will be written to `$GITHUB_WORKSPACE/octodns-sync.plan`.
 
 ### Add pull request comment
 
