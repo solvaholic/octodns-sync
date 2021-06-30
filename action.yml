@@ -25,6 +25,10 @@ inputs:
     description: 'Provide a token to use, if you set add_pr_comment to Yes.'
     required: true
     default: 'Not set'
+  add_pr_comment_footer:
+    description: 'Include footer in PR comment? Defaults to Yes'
+    required: true
+    default: 'Yes'
 
 runs:
   using: 'composite'
@@ -49,6 +53,8 @@ runs:
       env:
         ADD_PR_COMMENT: ${{ inputs.add_pr_comment }}
         PR_COMMENT_TOKEN: ${{ inputs.pr_comment_token }}
+        ADD_PR_COMMENT_FOOTER: ${{ inputs.add_pr_comment_footer }}
+        DOIT: ${{ inputs.doit }}
       run: ${{ github.action_path }}/scripts/comment.sh
       shell: bash
 branding:
