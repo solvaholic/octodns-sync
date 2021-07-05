@@ -9,8 +9,8 @@ _logfile="${GITHUB_WORKSPACE}/octodns-sync.log"
 _planfile="${GITHUB_WORKSPACE}/octodns-sync.plan"
 
 echo "INFO: Cleaning up plan and log files if they already exist"
-rm -f $_logfile
-rm -f $_planfile
+rm -f "$_logfile"
+rm -f "$_planfile"
 
 echo "INFO: _config_path: ${_config_path}"
 if [ "${_doit}" = "--doit" ]; then
@@ -32,7 +32,7 @@ grep --quiet --fixed-strings --invert-match \
 fi
 
 # https://github.community/t/set-output-truncates-multiline-strings/16852/4
-_plan="$(cat $_planfile)"
+_plan="$(cat "$_planfile")"
 _plan="${_plan//'%'/'%25'}"
 _plan="${_plan//$'\n'/'%0A'}"
 _plan="${_plan//$'\r'/'%0D'}"
