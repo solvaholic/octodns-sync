@@ -7,9 +7,9 @@ name: Lint Code Base
 #
 
 on:
-  # Run on all pushes, except to main
-  push:
-    branches-ignore: [main]
+  # Run on pull_request activity
+  pull_request:
+    types: [opened, synchronize, reopened]
 
   # Run when manually triggered
   workflow_dispatch:
