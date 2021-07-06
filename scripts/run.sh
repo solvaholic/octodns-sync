@@ -1,6 +1,10 @@
 #!/bin/bash
 # Run octodns-sync
 
+# Requires these, provided in action.yml:
+# - CONFIG_PATH
+# - DOIT
+
 _config_path=$CONFIG_PATH
 _doit=$DOIT
 

@@ -53,8 +53,10 @@ runs:
       env:
         ADD_PR_COMMENT: ${{ inputs.add_pr_comment }}
         PR_COMMENT_TOKEN: ${{ inputs.pr_comment_token }}
+        COMMENTS_URL: ${{ github.pull_request.comments_url }}
       run: ${{ github.action_path }}/scripts/comment.sh
       shell: bash
+      working-directory: ${{ github.workspace }}
 branding:
   icon: 'list'
   color: 'purple'

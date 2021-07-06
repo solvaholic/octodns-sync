@@ -1,6 +1,12 @@
 #!/bin/bash
 # Add pull request comment
 
+# Requires these, provided in action.yml:
+# - ADD_PR_COMMENT (skip unless "Yes")
+# - PR_COMMENT_TOKEN (fail if empty)
+# - COMMENTS_URL (skip if empty)
+# - Current working directory is in the config repo
+
 _planfile="${GITHUB_WORKSPACE}/octodns-sync.plan"
 
 if [ "${ADD_PR_COMMENT}" = "Yes" ]; then
