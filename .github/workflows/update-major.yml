@@ -22,7 +22,7 @@ jobs:
       # this workflow run
       - uses: actions/checkout@v2
 
-      # Update short version tags, for example v2 and v2.2
+      # Update short version tag, for example v2
       - name: Update major version tag
         id: roll-tag
         env:

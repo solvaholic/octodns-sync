@@ -56,18 +56,17 @@ jobs:
           _branch="release-${{ steps.get-ver.outputs.ver }}"
           echo "::set-output name=branch::${_branch}"
       - name: 'data: Payload for releases API call'
-        # TODO: Ensure output is usable as JSON
         id: get-data
         run: |
           _repo="${{ github.repository }}"
-          _ver="v${{ steps.get-ver.outputs.ver }}"
+          _ver="${{ steps.get-ver.outputs.ver }}"
           _tag="${{ steps.get-tag.outputs.tag }}"
           _branch="${{ steps.get-branch.outputs.branch }}"
           echo "${_ver} ${_tag} ${_repo} ${_branch}"
-          _data="{  \"tag_name\": \"${_tag}\",
-                    \"target_commitish\": \"${_branch}\",
-                    \"name\": \"${_repo#*/} ${_tag}\",
-                    \"body\": \"words words words\",
+          _data="{  \"tag_name\": \"${_tag}\", \
+                    \"target_commitish\": \"${_branch}\", \
+                    \"name\": \"${_repo#*/} ${_tag}\", \
+                    \"body\": \"words words words\", \
                     \"draft\": true }"
           echo "${_data}"
           echo "::set-output name=data::${_data}"
