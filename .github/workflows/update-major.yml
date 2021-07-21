@@ -1,0 +1,49 @@
+name: Update major tag
+
+on:
+  # Run when a release tag is pushed
+  push:
+    branches-ignore:
+      - '**'
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  # When a release tag is pushed, update the matching short
+  # version tag, for example v2
+  update-tags:
+    runs-on: ubuntu-20.04
+    steps:
+
+      # Check out this repository at the same ref that triggered
+      # this workflow run
+      - uses: actions/checkout@v2
+
+      # Update short version tags, for example v2 and v2.2
+      - name: Update major version tag
+        id: roll-tag
+        env:
+          GIT_AUTHOR_NAME: ${{ github.repository_owner }}
+          GIT_AUTHOR_EMAIL: ${{ github.repository_owner }}@users.noreply.github.com
+        run: |
+          # Set up variables.
+          _tag="${INPUT_TAG:-${GITHUB_REF#refs/tags/}}" # v2.2.0
+          _major="${MINOR%.*}"                          # v2
+          _msg="Release ${_tag}"
+          _curr="$(gh api /repos/:owner/:repo/releases/latest | \
+                  jq -r .tag_name)"
+          # If tag pushed is not for latest release, exit early
+          if [ "$_tag" != "$_curr" ]; then
+            echo "SKIP: Tag pushed ($_tag) is not for latest release."
+            exit 0
+          fi
+          # Set up Git.
+          git config user.name "${GIT_AUTHOR_NAME}"
+          git config user.email "${GIT_AUTHOR_EMAIL}"
+          # Update _major tag
+          git tag -fa "${_major}" -m "${_msg}"
+          # Push _major tag
+          git push --force origin "${_major}"

@@ -1,24 +1,26 @@
 # Release checklist
 
-TODO: Make this simpler and more reliable.
+- [ ] Is the [changelog] up-to-date?
 
-## Prerequisites
 
-- [ ] Identify the release version, for example `2.2.1`
-- [ ] Create a corresponding branch from `main`, for example `release-2.2.1`
+- [ ] Pick the release version, for example `2.3.0`
+- [ ] Create a matching branch from `main`, for example `release-2.3.0`
 - [ ] Push your branch
+- [ ] Did the _Create a draft release_ [workflow] run automatically?
 
-## Run [the _Create a release_ workflow](https://github.com/solvaholic/octodns-sync/actions) from your branch
 
-Which will perform these tasks:
+- [ ] Rename _Unreleased_ section of CHANGELOG.md to release version
+- [ ] Any other changes to make?
 
-- [ ] Ensure the specified version has a section in CHANGELOG.md
-- [ ] Create the draft release
 
-## Finalize and publish [the release](https://github.com/solvaholic/octodns-sync/releases)
+- [ ] Finalize and publish the [release], which pushes the release tag
+- [ ] Did the _Update major tag_ [workflow] run automatically?
 
-Which will push the release tag. If you'd like to publish this release to the marketplace, be sure to check that box.
 
-## Clean up
+- [ ] Delete any [branches] you're done with
 
-- [ ] Delete any [branches](https://github.com/solvaholic/octodns-sync/branches) you're done with
+
+[changelog]: https://github.com/solvaholic/octodns-sync/blob/main/docs/CHANGELOG.md
+[workflow]: https://github.com/solvaholic/octodns-sync/actions
+[release]: https://github.com/solvaholic/octodns-sync/releases
+[branches]: https://github.com/solvaholic/octodns-sync/branches

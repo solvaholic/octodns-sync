@@ -28,7 +28,10 @@ jobs:
 
       # Run yamllint to lint YAML
       - name: Lint YAML files
-        run: yamllint --no-warnings ./
+        run: |
+          yamllint --no-warnings \
+          -d "{extends: default, rules: {line-length: {max: 85}}}" \
+          ./
 
       # Run shellcheck to lint shell scripts
       - name: Lint shell scripts
