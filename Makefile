@@ -13,7 +13,9 @@ lint-yaml:
 	@docker run --rm \
 	-v "$(realpath .)":"/tmp/lint":ro \
 	--entrypoint /usr/local/bin/yamllint \
-	github/super-linter --no-warnings /tmp/lint
+	github/super-linter --no-warnings \
+	-d "{extends: default, rules: {line-length: {max: 85}}}" \
+	/tmp/lint
 	@echo "All the YAML things linted!"
 
 lint-shell:
