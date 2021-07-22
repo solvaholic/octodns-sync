@@ -25,9 +25,8 @@ jobs:
     outputs:
       ver: ${{ steps.get-ver.outputs.ver }}
       tag: ${{ steps.get-tag.outputs.tag }}
-      branch: ${{ steps.get-branch.outputs.branch }}
-      pr: ${{ steps.get-pr.outputs.pr }}
-      data: ${{ steps.get-data.outputs.data }}
+      branch: ${{ steps.get-ref.outputs.branch }}
+      ref: ${{ steps.get-ref.outputs.ref }}
     steps:
       - name: Checkout ${{ github.repository }}:${{ github.ref }}
         uses: actions/checkout@v2
@@ -40,46 +39,67 @@ jobs:
             "push")
               _ver="${GITHUB_REF#refs/heads/release-}}" ;;
             *)
+              echo "FAIL: Unexpected workflow trigger."
               exit 1
           esac
           echo "::set-output name=ver::${_ver}"
       - name: 'tag: Tag for this release'
-        # TODO: Fail if tag already exists
         id: get-tag
         run: |
           _tag="v${{ steps.get-ver.outputs.ver }}"
           echo "::set-output name=tag::${_tag}"
-      - name: 'branch: Branch for this release'
-        # TODO: Create branch, if it does not exist
-        id: get-branch
+      - name: 'branch, ref: Branch for this release'
+        id: get-ref
         run: |
           _branch="release-${{ steps.get-ver.outputs.ver }}"
+          _ref="refs/heads/${_branch}"
           echo "::set-output name=branch::${_branch}"
-      - name: 'data: Payload for releases API call'
-        id: get-data
+          echo "::set-output name=ref::${_ref}"
+
+  create-branch:
+    name: Create the release branch for ${{ needs.meta.outputs.ver }}
+    needs: meta
+    if: ${{ github.ref != needs.meta.outputs.ref }}
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout ${{ github.repository }}:${{ github.ref }}
+        uses: actions/checkout@v2
+      - name: Configure Git client
         run: |
-          _repo="${{ github.repository }}"
-          _ver="${{ steps.get-ver.outputs.ver }}"
-          _tag="${{ steps.get-tag.outputs.tag }}"
-          _branch="${{ steps.get-branch.outputs.branch }}"
-          echo "${_ver} ${_tag} ${_repo} ${_branch}"
-          _data="{  \"tag_name\": \"${_tag}\", \
-                    \"target_commitish\": \"${_branch}\", \
-                    \"name\": \"${_repo#*/} ${_tag}\", \
-                    \"body\": \"words words words\", \
-                    \"draft\": true }"
-          echo "${_data}"
-          echo "::set-output name=data::${_data}"
+          git config user.name "${{ github.repository_owner }}"
+          git config user.email "${{ github.repository_owner }}@users.noreply.github.com"
+      - name: Create branch ${{ needs.meta.outputs.branch }}
+        run: |
+          _ghref="${{ github.ref }}"
+          _myref="${{ needs.meta.outputs.ref }}"
+          git update-ref "${_myref}" "${_ghref}"
+          git push origin "${_myref}"
 
   create-release:
-    name: Create release ${{ steps.get-tag.outputs.tag }}
-    needs: meta
+    name: Create draft release ${{ needs.meta.outputs.tag }}
+    needs: [meta, create-branch]
     environment: uses-pat
     runs-on: ubuntu-20.04
     steps:
-      - name: Create the draft release
+      - name: Checkout ${{ github.repository }}:${{ github.ref }}
+        uses: actions/checkout@v2
+      - name: Assemble data payload for releases API call
+        id: get-data
         run: |
-          _data="${{ needs.meta.outputs.data }}"
+          _repo="${{ github.repository }}"
+          _tag="${{ needs.meta.outputs.tag }}"
+          _branch="${{ needs.meta.outputs.branch }}"
+          _body="words words words"
+          _draft="true"
+          _data="{  \"tag_name\": \"${_tag}\", \
+                    \"target_commitish\": \"${_branch}\", \
+                    \"name\": \"${_repo#*/} ${_tag}\", \
+                    \"body\": \"${_body}\", \
+                    \"draft\": ${_draft} }"
+          echo "::set-output name=data::${_data}"
+      - name: Call releases API to create draft release
+        run: |
+          _data="${{ steps.get-data.outputs.data }}"
           echo "${_data}" | \
           GITHUB_TOKEN=${{ secrets.PAT }} \
           gh api -X POST /repos/:owner/:repo/releases --input -
