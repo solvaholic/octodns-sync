@@ -101,7 +101,7 @@ jobs:
           echo "::set-output name=data::${_data}"
       - name: Call releases API to create draft release
         run: |
-          _data="${{ steps.get-data.outputs.data }}"
+          _data='${{ steps.get-data.outputs.data }}'
           echo "${_data}" | \
           GITHUB_TOKEN=${{ secrets.PAT }} \
           gh api -X POST /repos/:owner/:repo/releases --input -
