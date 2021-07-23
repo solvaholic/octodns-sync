@@ -28,7 +28,9 @@ jobs:
 
       # Run yamllint to lint YAML
       - name: Lint YAML files
-        run: yamllint --no-warnings ./
+        run: |
+          yamllint --no-warnings \
+          ./
 
       # Run shellcheck to lint shell scripts
       - name: Lint shell scripts

@@ -1,107 +1,107 @@
-name: Create a release
-
-# Use this workflow to:
-# - Create a release from a branch
-# - Update major and minor tags when a release is published
+name: Create a draft release
 
 on:
   # Run when manually triggered
   workflow_dispatch:
     inputs:
-      # User inputs the release version, for example `2.2.1`
       version:
-        description: 'Release version to create, for example 2.2.1'
+        description: 'Release version to create, for example 2.3.0'
         required: true
-        default: "2.2.1"
-  # Run when a release is published
-  release:
-    types: [published]
+        default: "2.3.0"
+  # Run when a release branch is pushed
+  push:
+    branches:
+      - 'release-*.*.*'
 
 defaults:
   run:
     shell: bash
 
-env:
-  GIT_AUTHOR_NAME: ${{ github.repository_owner }}
-  GIT_AUTHOR_EMAIL: ${{ github.repository_owner }}@users.noreply.github.com
-
 jobs:
-  create-release:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
+
+  meta:
+    name: Parse event data into outputs
     runs-on: ubuntu-20.04
     outputs:
-      changelog: ${{ steps.changelog.outputs.changelog }}
+      ver: ${{ steps.get-ver.outputs.ver }}
+      tag: ${{ steps.get-tag.outputs.tag }}
+      branch: ${{ steps.get-ref.outputs.branch }}
+      ref: ${{ steps.get-ref.outputs.ref }}
     steps:
-      # Check out this repository at the same ref that triggered
-      # this workflow run
-      - uses: actions/checkout@v2
-
-      # Ensure the specified version has a section in CHANGELOG.md
-      - name: Check CHANGELOG.md for '${{ github.event.inputs.version }}'
-        id: changelog
+      - name: Checkout ${{ github.repository }}:${{ github.ref }}
+        uses: actions/checkout@v2
+      - name: 'ver: Version number for this release'
+        id: get-ver
         run: |
-          _ver="${{ github.event.inputs.version }}"
-          _changelog=
-          if grep -Fq "## [${_ver}]" docs/CHANGELOG.md; then
-            echo "Found '## [${_ver}]' in CHANGELOG.md :+1:"
-          else
-            echo "FAIL: Did not find '## [${_ver}]' in CHANGELOG.md"
-            exit 1
-          fi
-          # TODO: Make this :point_down: actually work
-          _changelog=":shrug:"
-          echo "Set changelog to '${_changelog}'."
-          echo "::set-output name=changelog::${_changelog}"
-
-      # Create the draft release
-      # https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#get-a-release
-      # https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#create-a-release
-      # https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#get-the-latest-release
-
-      - name: Create the draft release
-        id: mkrel
+          case "${{ github.event_name }}" in
+            "workflow_dispatch")
+              _ver="${{ github.event.inputs.version }}" ;;
+            "push")
+              _ver="${GITHUB_REF#refs/heads/release-}}" ;;
+            *)
+              echo "FAIL: Unexpected workflow trigger."
+              exit 1
+          esac
+          echo "::set-output name=ver::${_ver}"
+      - name: 'tag: Tag for this release'
+        id: get-tag
         run: |
-          _ver="${{ github.event.inputs.version }}"
-          _tag="v${_ver}"
+          _tag="v${{ steps.get-ver.outputs.ver }}"
+          echo "::set-output name=tag::${_tag}"
+      - name: 'branch, ref: Branch for this release'
+        id: get-ref
+        run: |
+          _branch="release-${{ steps.get-ver.outputs.ver }}"
+          _ref="refs/heads/${_branch}"
+          echo "::set-output name=branch::${_branch}"
+          echo "::set-output name=ref::${_ref}"
+
+  create-branch:
+    name: Create the release branch for ${{ needs.meta.outputs.ver }}
+    needs: meta
+    if: ${{ github.ref != needs.meta.outputs.ref }}
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout ${{ github.repository }}:${{ github.ref }}
+        uses: actions/checkout@v2
+      - name: Configure Git client
+        run: |
+          _user="${{ github.repository_owner }}"
+          _email="${_user}@users.noreply.github.com"
+          git config user.name "${_user}"
+          git config user.email "${_email}"
+      - name: Create branch ${{ needs.meta.outputs.branch }}
+        run: |
+          _ghref="${{ github.ref }}"
+          _myref="${{ needs.meta.outputs.ref }}"
+          git update-ref "${_myref}" "${_ghref}"
+          git push origin "${_myref}"
+
+  create-release:
+    name: Create draft release ${{ needs.meta.outputs.tag }}
+    needs: [meta, create-branch]
+    environment: uses-pat
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout ${{ github.repository }}:${{ github.ref }}
+        uses: actions/checkout@v2
+      - name: Assemble data payload for releases API call
+        id: get-data
+        run: |
           _repo="${{ github.repository }}"
-          _relbranch="${GITHUB_REF#refs/heads/}"
-          echo "${_ver} ${_tag} ${_repo} ${_relbranch}"
-          _data="{  \"tag_name\": \"${_tag}\",
-                    \"target_commitish\": \"${_relbranch}\",
-                    \"name\": \"${_repo#*/} ${_tag}\",
-                    \"body\": \"words words words\",
-                    \"draft\": true }"
-          echo "${_data}"
-          # Create the draft release
+          _tag="${{ needs.meta.outputs.tag }}"
+          _branch="${{ needs.meta.outputs.branch }}"
+          _body="words words words"
+          _draft="true"
+          _data="{  \"tag_name\": \"${_tag}\", \
+                    \"target_commitish\": \"${_branch}\", \
+                    \"name\": \"${_repo#*/} ${_tag}\", \
+                    \"body\": \"${_body}\", \
+                    \"draft\": ${_draft} }"
+          echo "::set-output name=data::${_data}"
+      - name: Call releases API to create draft release
+        run: |
+          _data='${{ steps.get-data.outputs.data }}'
           echo "${_data}" | \
           GITHUB_TOKEN=${{ secrets.PAT }} \
           gh api -X POST /repos/:owner/:repo/releases --input -
-
-  # When a release is published, update short
-  # version tags, for example v2 and v2.2
-  update-tags:
-    if: ${{ github.event_name == 'release' }}
-    runs-on: ubuntu-20.04
-    steps:
-      # Check out this repository at the same ref that triggered
-      # this workflow run
-      - uses: actions/checkout@v2
-
-      # Update short version tags, for example v2 and v2.2
-      - name: Update major and minor version tags
-        id: roll-tags
-        run: |
-          # Set up variables.
-          TAG="${INPUT_TAG:-${GITHUB_REF#refs/tags/}}" # v2.2.0
-          MINOR="${TAG%.*}"                            # v2.2
-          MAJOR="${MINOR%.*}"                          # v2
-          MESSAGE="Release ${TAG}"
-          # Set up Git.
-          git config user.name "${GIT_AUTHOR_NAME}"
-          git config user.email "${GIT_AUTHOR_EMAIL}"
-          # Update MAJOR/MINOR tag
-          git tag -fa "${MAJOR}" -m "${MESSAGE}"
-          git tag -fa "${MINOR}" -m "${MESSAGE}"
-          # Push MAJOR/MINOR tag
-          git push --force origin "${MINOR}"
-          git push --force origin "${MAJOR}"
