@@ -1,6 +1,9 @@
 #!/bin/bash
 # Install octodns and dependencies
 
+# Requires these, provided in action.yml:
+# - OCTODNS_REF
+
 # Exit early if octodns is already installed
 if command -v octodns-sync; then
   echo "INFO: It looks like octodns is already installed."
