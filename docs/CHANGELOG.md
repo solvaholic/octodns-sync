@@ -8,14 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Known issues
-
-- ([#41](https://github.com/solvaholic/octodns-sync/issues/41)) `add_pr_comment` adds a new comment for each run.
-
 ### Added
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
+
+- ([#41](https://github.com/solvaholic/octodns-sync/issues/41)) Document workaround for `add_pr_comment` adding a new comment for each run.
+
 ### Security
 
 ## [2.3.0] - 2021-07-28
