@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Known issues
+
+- ([#41](https://github.com/solvaholic/octodns-sync/issues/41)) `add_pr_comment` adds a new comment for each run.
+
 ### Added
 - ([#66](https://github.com/solvaholic/octodns-sync/pull/66)) Add output `plan` to include `plan_outputs` from `octodns-sync` command.
 

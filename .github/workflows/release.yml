@@ -37,7 +37,7 @@ jobs:
             "workflow_dispatch")
               _ver="${{ github.event.inputs.version }}" ;;
             "push")
-              _ver="${GITHUB_REF#refs/heads/release-}}" ;;
+              _ver="${GITHUB_REF#refs/heads/release-}" ;;
             *)
               echo "FAIL: Unexpected workflow trigger."
               exit 1
