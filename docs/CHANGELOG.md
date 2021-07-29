@@ -12,17 +12,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ([#41](https://github.com/solvaholic/octodns-sync/issues/41)) `add_pr_comment` adds a new comment for each run.
 
 ### Added
-- ([#66](https://github.com/solvaholic/octodns-sync/pull/66)) Add output `plan` to include `plan_outputs` from `octodns-sync` command.
-
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
+### Security
+
+## [2.3.0] - 2021-07-28
+
+### Known issues
+
+- ([#41](https://github.com/solvaholic/octodns-sync/issues/41)) `add_pr_comment` adds a new comment for each run.
+
+### Added
+- ([#66](https://github.com/solvaholic/octodns-sync/pull/66)) Add output `plan` to include `plan_outputs` from `octodns-sync` command.
+
+### Fixed
 - ([#51](https://github.com/solvaholic/octodns-sync/issues/51)) When adding plan output to a pull request comment, `comment.sh` assumed GITHUB_SHA had been checked out.
 - ([#57](https://github.com/solvaholic/octodns-sync/issues/57)) [2.2.x] Running octodns-sync twice in one job failed. (Fixed in [#66](https://github.com/solvaholic/octodns-sync/pull/66))
 - ([#70](https://github.com/solvaholic/octodns-sync/issues/70)) `add_pr_comment` is skipped when pull request is from fork.
-
-### Security
 
 ## [2.2.0] - 2021-05-09
 
