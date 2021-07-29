@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - ([#51](https://github.com/solvaholic/octodns-sync/issues/51)) When adding plan output to a pull request comment, `comment.sh` assumed GITHUB_SHA had been checked out.
 - ([#57](https://github.com/solvaholic/octodns-sync/issues/57)) [2.2.x] Running octodns-sync twice in one job failed. (Fixed in [#66](https://github.com/solvaholic/octodns-sync/pull/66))
+- ([#70](https://github.com/solvaholic/octodns-sync/issues/70)) `add_pr_comment` is skipped when pull request is from fork.
 
 ### Security
 
