@@ -37,7 +37,8 @@ jobs:
           _tag="${INPUT_TAG:-${GITHUB_REF#refs/tags/}}" # v2.2.0
           _major="${MINOR%.*}"                          # v2
           _msg="Release ${_tag}"
-          _curr="$(gh api /repos/:owner/:repo/releases/latest | \
+          _curr="$(GITHUB_TOKEN=${{ github.token }} \
+                  gh api /repos/:owner/:repo/releases/latest | \
                   jq -r .tag_name)"
           # If tag pushed is not for latest release, exit early
           if [ "$_tag" != "$_curr" ]; then
