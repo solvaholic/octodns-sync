@@ -2,7 +2,7 @@
 
 When a user proposes DNS configuration changes in a pull request, it may help to write the `octodns-sync` plan output to a comment in the pull request.
 
-This document describes two approaches for achieving this. Be aware that, for either approach, if users will propose DNS changes in pull requests **from forks** then it may be necessary to work around some GitHub token permission constraints.
+This document describes two approaches for achieving this. Be aware that, for either approach, if users will propose DNS changes in pull requests **from forks** then it may be necessary to work around some GitHub token permission constraints. See [pull_request_target.md] for more details.
 
 When using this Action's built-in `add_pr_comment` feature, be aware it'll add a new comment for each run. To avoid creating a new comment for each run, and/or to get more control over the contents of the comment, use @peter-evans' [`create-or-update-comment` Action] instead.
 
@@ -21,7 +21,7 @@ manager:
 
 ## Configure the workflow
 
-_Note: If users will propose DNS changes in pull requests **from forks** then it may be necessary to work around some GitHub token permission constraints._
+_Note: If users will propose DNS changes in pull requests **from forks** then it may be necessary to work around some GitHub token permission constraints. See [pull_request_target.md] for more details._
 
 ### @peter-evans' `create-or-update-comment` Action
 
@@ -100,5 +100,6 @@ jobs:
 Thank you @xt0rted @patcon @travislikestocode @thattommyhall for your help and support sorting :point_up: all this and improving **solvaholic/octodns-sync** :bow:
 
 
+[pull_request_target.md]: pull_request_target.md
 [`create-or-update-comment` Action]: https://github.com/peter-evans/create-or-update-comment
 [`plan_outputs` in the **octodns** configuration]: https://github.com/octodns/octodns/pull/156
