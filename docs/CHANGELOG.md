@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Known issues
 ### Added
 ### Changed
+
+- ([#85](https://github.com/solvaholic/octodns-sync/issues/85)) Change default **octodns/octodns** from v0.9.12 to v0.9.14.
+
 ### Deprecated
 ### Removed
 ### Fixed

@@ -87,9 +87,9 @@ Default `"Not set"`.
 
 ### `octodns_ref`
 
-Select a release tag or a branch of octodns to use. For example "v0.9.12" or "awesome-feature".
+Select a release tag or a branch of octodns to use. For example "v0.9.14" or "awesome-feature".
 
-Default `"v0.9.12"`.
+Default `"v0.9.14"`.
 
 ## Outputs
 
