@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Known issues
+
+- ([#86](https://github.com/solvaholic/octodns-sync/issues/86)) This Action does not work with extracted providers.
+
 ### Added
 ### Changed
 
