@@ -19,10 +19,6 @@ on:
     paths:
       - '*.yaml'
 
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.route53_aws_key_id }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.route53_aws_secret_access_key }}
-
 jobs:
   publish:
     name: Publish DNS config from main
@@ -37,6 +33,9 @@ jobs:
         with:
           config_path: public.yaml
           doit: '--doit'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.route53_aws_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.route53_aws_secret_access_key }}
 ```
 
 ## Inputs
