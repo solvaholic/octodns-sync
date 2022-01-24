@@ -29,8 +29,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Publish
-        uses: solvaholic/octodns-sync@main
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - uses: solvaholic/octodns-sync@main
         with:
           config_path: public.yaml
           doit: '--doit'
