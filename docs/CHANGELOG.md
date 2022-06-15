@@ -8,19 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Known issues
-
-- ([#86](https://github.com/solvaholic/octodns-sync/issues/86)) This Action does not work with extracted providers.
-
 ### Added
 ### Changed
 
-- ([#85](https://github.com/solvaholic/octodns-sync/issues/85)) Change default **octodns/octodns** from v0.9.12 to v0.9.14.
+- ([#86](https://github.com/solvaholic/octodns-sync/issues/86)) Remove `octodns_ref` input and installation script.
 
 ### Deprecated
 ### Removed
 ### Fixed
 
 - ([#41](https://github.com/solvaholic/octodns-sync/issues/41)) Document workaround for `add_pr_comment` adding a new comment for each run.
+- ([#86](https://github.com/solvaholic/octodns-sync/issues/86)) This Action does not work with extracted providers.
 
 ### Security
 
