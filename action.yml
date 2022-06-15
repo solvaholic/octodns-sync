@@ -17,10 +17,6 @@ inputs:
                   not do it.'
     required: false
     default: ''
-  octodns_ref:
-    description: 'Select a release tag or a branch of octodns to use.'
-    required: true
-    default: 'v0.9.14'
   pr_comment_token:
     description: 'Provide a token to use, if you set add_pr_comment to Yes.'
     required: true
@@ -33,13 +29,6 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Install octodns/octodns and dependencies
-      id: install
-      env:
-        OCTODNS_REF: ${{ inputs.octodns_ref }}
-      run: ${{ github.action_path }}/scripts/install.sh
-      shell: bash
-      working-directory: ${{ github.action_path }}
     - name: Run octodns-sync
       id: run
       env:

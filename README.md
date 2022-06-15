@@ -87,12 +87,6 @@ Provide a token to use, if you set `add_pr_comment` to "Yes".
 
 Default `"Not set"`.
 
-### `octodns_ref`
-
-Select a release tag or a branch of octodns to use. For example "v0.9.14" or "awesome-feature".
-
-Default `"v0.9.14"`.
-
 ## Outputs
 
 ### plan
