@@ -19,21 +19,23 @@ on:
     paths:
       - '*.yaml'
 
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.route53_aws_key_id }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.route53_aws_secret_access_key }}
-
 jobs:
   publish:
     name: Publish DNS config from main
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Publish
-        uses: solvaholic/octodns-sync@main
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - uses: solvaholic/octodns-sync@main
         with:
           config_path: public.yaml
           doit: '--doit'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.route53_aws_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.route53_aws_secret_access_key }}
 ```
 
 ## Inputs
@@ -85,12 +87,6 @@ Provide a token to use, if you set `add_pr_comment` to "Yes".
 
 Default `"Not set"`.
 
-### `octodns_ref`
-
-Select a release tag or a branch of octodns to use. For example "v0.9.14" or "awesome-feature".
-
-Default `"v0.9.14"`.
-
 ## Outputs
 
 ### plan
@@ -123,10 +119,14 @@ on:
   pull_request:
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: solvaholic/octodns-sync@latest
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - uses: solvaholic/octodns-sync@main
         with:
           config_path: public.yaml
           add_pr_comment: 'Yes'
