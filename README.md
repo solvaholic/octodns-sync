@@ -119,10 +119,14 @@ on:
   pull_request:
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: solvaholic/octodns-sync@latest
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - uses: solvaholic/octodns-sync@main
         with:
           config_path: public.yaml
           add_pr_comment: 'Yes'

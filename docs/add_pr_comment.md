@@ -37,12 +37,16 @@ on:
 jobs:
   octodns-sync:
     name: Run `octodns-sync` with public.yaml
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     outputs:
       plan: ${{ steps.generate-plan.outputs.plan }}
     steps:
       - uses: actions/checkout@v2
-      - uses: solvaholic/octodns-sync@v2.3.0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - uses: solvaholic/octodns-sync@main
         id: generate-plan
         with:
           config_path: public.yaml
@@ -52,7 +56,7 @@ jobs:
   add-pr-comment:
     name: Add `octodns-sync` plan to comment
     needs: [octodns-sync]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Find previous comment, if present
         uses: peter-evans/find-comment@v1.2.0
@@ -85,10 +89,14 @@ on:
   pull_request:
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: solvaholic/octodns-sync@v2.3.0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - uses: solvaholic/octodns-sync@main
         with:
           config_path: public.yaml
           add_pr_comment: 'Yes'
