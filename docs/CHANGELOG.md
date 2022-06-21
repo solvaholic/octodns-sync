@@ -5,22 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [3.0.0] - 2022-06-21
 
-### Known issues
-### Added
-### Changed
+### Removed
 
 - ([#86](https://github.com/solvaholic/octodns-sync/issues/86)) Remove `octodns_ref` input and installation script.
+  **_BREAKING CHANGE: `octodns` must now be installed by a separate workflow step, prior to running this action._**
 
-### Deprecated
-### Removed
 ### Fixed
 
 - ([#41](https://github.com/solvaholic/octodns-sync/issues/41)) Document workaround for `add_pr_comment` adding a new comment for each run.
 - ([#86](https://github.com/solvaholic/octodns-sync/issues/86)) This Action does not work with extracted providers.
-
-### Security
 
 ## [2.3.0] - 2021-07-28
 
