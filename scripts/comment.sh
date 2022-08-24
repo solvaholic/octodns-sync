@@ -43,5 +43,5 @@ ${_footer}"
   GITHUB_EVENT_PATH="${GITHUB_EVENT_PATH}" \
   python3 -c "import requests, os, json
 comments_url = json.load(open(os.environ['GITHUB_EVENT_PATH'], 'r'))['pull_request']['comments_url']
-response = requests.post(comments_url, auth=(os.environ['_user'], os.environ['_token']), json={'body':os.environ['_body']} headers={'user-agent': 'octodns-sync'})
+response = requests.post(comments_url, auth=(os.environ['_user'], os.environ['_token']), json={'body':os.environ['_body']}, headers={'user-agent': 'octodns-sync'})
 print(response)"
