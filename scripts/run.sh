@@ -17,20 +17,12 @@ rm -f "$_logfile"
 rm -f "$_planfile"
 
 echo "INFO: _config_path: ${_config_path}"
-if [ "${_doit}" = "--doit" ]; then
-  script "${_logfile}" -e -c \
-  "octodns-sync --config-file=\"${_config_path}\" --doit \
-  >>\"${_planfile}\""
-else
-  script "${_logfile}" -e -c \
-  "octodns-sync --config-file=\"${_config_path}\" \
-  >>\"${_planfile}\""
+if [ ! "${_doit}" = "--doit" ]; then
+  _doit=
 fi
 
-# Exit 1 if octodns-sync exited non-zero.
-if tail --lines=1 "$_logfile" | \
-grep --quiet --fixed-strings --invert-match \
-'[COMMAND_EXIT_CODE="0"]'; then
+if ! octodns-sync --config-file="${_config_path}" "${_doit}" \
+1>"${_planfile}" 2>"${_logfile}"; then
   echo "FAIL: octodns-sync exited with an error."
   exit 1
 fi
