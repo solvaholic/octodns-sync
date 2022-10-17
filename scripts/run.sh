@@ -24,8 +24,14 @@ fi
 if ! octodns-sync --config-file="${_config_path}" "${_doit}" \
 1>"${_planfile}" 2>"${_logfile}"; then
   echo "FAIL: octodns-sync exited with an error."
+  echo "FAIL: Here are the contents of ${_logfile}:"
+  cat "${_logfile}"
   exit 1
 fi
+
+# Acknowledge that the log output went away; Link to issue
+echo "INFO: octodns-sync log output has been written to ${_logfile}"
+echo "INFO: https://github.com/solvaholic/octodns-sync/issues/92"
 
 # https://github.community/t/set-output-truncates-multiline-strings/16852/4
 _plan="$(cat "$_planfile")"
