@@ -33,16 +33,10 @@ fi
 echo "INFO: octodns-sync log output has been written to ${_logfile}"
 echo "INFO: https://github.com/solvaholic/octodns-sync/issues/92"
 
-# https://github.community/t/set-output-truncates-multiline-strings/16852/4
-_log="$(cat "$_logfile")"
-_log="${_log//'%'/'%25'}"
-_log="${_log//$'\n'/'%0A'}"
-_log="${_log//$'\r'/'%0D'}"
-_plan="$(cat "$_planfile")"
-_plan="${_plan//'%'/'%25'}"
-_plan="${_plan//$'\n'/'%0A'}"
-_plan="${_plan//$'\r'/'%0D'}"
-
-# Output the plan and log
-echo "::set-output name=log::${_log}"
-echo "::set-output name=plan::${_plan}"
+# Set the plan and log outputs
+echo 'log<<EOF' >> $GITHUB_ENV
+cat "$_logfile" >> $GITHUB_ENV
+echo 'EOF' >> $GITHUB_ENV
+echo 'plan<<EOF' >> $GITHUB_ENV
+cat "$_planfile" >> $GITHUB_ENV
+echo 'EOF' >> $GITHUB_ENV
