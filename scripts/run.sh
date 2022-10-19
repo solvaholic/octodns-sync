@@ -35,8 +35,8 @@ echo "INFO: https://github.com/solvaholic/octodns-sync/issues/92"
 
 # Set the plan and log outputs
 echo 'log<<EOF' >> $GITHUB_ENV
-cat "$_logfile" >> $GITHUB_ENV
+echo "$(cat "$_logfile")" >> $GITHUB_ENV
 echo 'EOF' >> $GITHUB_ENV
 echo 'plan<<EOF' >> $GITHUB_ENV
-cat "$_planfile" >> $GITHUB_ENV
+echo "$(cat "$_planfile")" >> $GITHUB_ENV
 echo 'EOF' >> $GITHUB_ENV
