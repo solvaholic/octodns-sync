@@ -5,6 +5,8 @@
 # - CONFIG_PATH
 # - DOIT
 
+# shellcheck disable=SC2005,SC2086,SC2129
+
 _config_path=$CONFIG_PATH
 _doit=$DOIT
 
@@ -21,7 +23,7 @@ if [ ! "${_doit}" = "--doit" ]; then
   _doit=
 fi
 
-if ! octodns-sync --config-file="${_config_path}" "${_doit}" \
+if ! octodns-sync --config-file="${_config_path}" ${_doit} \
 1>"${_planfile}" 2>"${_logfile}"; then
   echo "FAIL: octodns-sync exited with an error."
   echo "FAIL: Here are the contents of ${_logfile}:"
