@@ -1,0 +1,29 @@
+---
+'':
+  - type: A
+    values:
+      - 192.168.0.1
+abc:
+  - type: A
+    values:
+      - 192.168.0.1
+def:
+  - type: A
+    values:
+      - 192.168.0.1
+ghi:
+  - type: A
+    values:
+      - 192.168.0.1
+jkl:
+  - type: A
+    values:
+      - 192.168.0.1
+mno:
+  - type: A
+    values:
+      - 192.168.0.1
+pqr:
+  - type: A
+    values:
+      - 192.168.0.1

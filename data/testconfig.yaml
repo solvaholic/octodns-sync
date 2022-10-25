@@ -1,0 +1,25 @@
+---
+manager:
+  plan_outputs:
+    html:
+      class: octodns.provider.plan.PlanHtml
+
+providers:
+  config:
+    class: octodns.provider.yaml.YamlProvider
+    directory: ./data
+  etchosts:
+    class: octodns_etchosts.EtcHostsProvider
+    directory: ./data
+
+zones:
+  bad.solvaholic.com.:
+    sources:
+      - config
+    targets:
+      - etchosts
+  good.solvaholic.com.:
+    sources:
+      - config
+    targets:
+      - etchosts

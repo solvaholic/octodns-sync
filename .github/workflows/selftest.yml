@@ -1,0 +1,34 @@
+---
+name: Self Test
+
+#
+# Documentation:
+# https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions#example-using-an-action-in-the-same-repository-as-the-workflow
+#
+
+on:
+  # Run when manually triggered
+  workflow_dispatch:
+
+jobs:
+  selftest:
+    name: Publish DNS config from main
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - name: Run `octodns-sync` to deploy GOOD zone
+        uses: ./action.yml
+        with:
+          config_path: ./data/testconfig.yaml
+          doit: '--doit'
+          zone: good.solvaholic.com.
+      - name: Run `octodns-sync` to deploy BAD zone
+        uses: ./action.yml
+        with:
+          config_path: ./data/testconfig.yaml
+          doit: '--doit'
+          zone: bad.solvaholic.com.
