@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - ([#93](https://github.com/solvaholic/octodns-sync/pull/93)) Add output **log** to include output from `octodns-sync` command.
+- ([#96](https://github.com/solvaholic/octodns-sync/pull/96)) Add input **zone** to specify an individual zone to sync.
 
 ### Removed
 
