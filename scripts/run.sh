@@ -5,6 +5,8 @@
 # - CONFIG_PATH
 # - DOIT
 
+# shellcheck disable=SC2005,SC2086,SC2129
+
 _config_path=$CONFIG_PATH
 _doit=$DOIT
 
@@ -17,29 +19,26 @@ rm -f "$_logfile"
 rm -f "$_planfile"
 
 echo "INFO: _config_path: ${_config_path}"
-if [ "${_doit}" = "--doit" ]; then
-  script "${_logfile}" -e -c \
-  "octodns-sync --config-file=\"${_config_path}\" --doit \
-  >>\"${_planfile}\""
-else
-  script "${_logfile}" -e -c \
-  "octodns-sync --config-file=\"${_config_path}\" \
-  >>\"${_planfile}\""
+if [ ! "${_doit}" = "--doit" ]; then
+  _doit=
 fi
 
-# Exit 1 if octodns-sync exited non-zero.
-if tail --lines=1 "$_logfile" | \
-grep --quiet --fixed-strings --invert-match \
-'[COMMAND_EXIT_CODE="0"]'; then
+if ! octodns-sync --config-file="${_config_path}" ${_doit} \
+1>"${_planfile}" 2>"${_logfile}"; then
   echo "FAIL: octodns-sync exited with an error."
+  echo "FAIL: Here are the contents of ${_logfile}:"
+  cat "${_logfile}"
   exit 1
 fi
 
-# https://github.community/t/set-output-truncates-multiline-strings/16852/4
-_plan="$(cat "$_planfile")"
-_plan="${_plan//'%'/'%25'}"
-_plan="${_plan//$'\n'/'%0A'}"
-_plan="${_plan//$'\r'/'%0D'}"
+# Acknowledge that the log output went away; Link to issue
+echo "INFO: octodns-sync log output has been written to ${_logfile}"
+echo "INFO: https://github.com/solvaholic/octodns-sync/issues/92"
 
-# Output the plan file
-echo "::set-output name=plan::${_plan}"
+# Set the plan and log outputs
+echo 'log<<EOF' >> $GITHUB_OUTPUT
+echo "$(cat "$_logfile")" >> $GITHUB_OUTPUT
+echo 'EOF' >> $GITHUB_OUTPUT
+echo 'plan<<EOF' >> $GITHUB_OUTPUT
+echo "$(cat "$_planfile")" >> $GITHUB_OUTPUT
+echo 'EOF' >> $GITHUB_OUTPUT

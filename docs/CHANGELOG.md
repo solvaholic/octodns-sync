@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- ([#93](https://github.com/solvaholic/octodns-sync/pull/93)) Add output **log** to include output from `octodns-sync` command.
+
+### Removed
+
+- ([#93](https://github.com/solvaholic/octodns-sync/pull/93)) `octodns-sync` command output no longer appears in workflow run logs.
+
+### Fixed
+
+- ([#92](https://github.com/solvaholic/octodns-sync/issues/92)) `octodns-sync` may silently fail on some Actions runners
+
 ## [3.0.0] - 2022-06-21
 
 ### Removed

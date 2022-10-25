@@ -22,6 +22,9 @@ inputs:
     required: true
     default: 'Not set'
 outputs:
+  log:
+    description: '`octodns-sync` command output'
+    value: ${{ steps.run.outputs.log}}
   plan:
     description: 'Planned changes, if configured in octodns'
     value: ${{ steps.run.outputs.plan}}
