@@ -4,11 +4,13 @@
 # Requires these, provided in action.yml:
 # - CONFIG_PATH
 # - DOIT
+# - ZONE
 
 # shellcheck disable=SC2005,SC2086,SC2129
 
 _config_path=$CONFIG_PATH
 _doit=$DOIT
+_zone=$ZONE
 
 # Run octodns-sync.
 _logfile="${GITHUB_WORKSPACE}/octodns-sync.log"
@@ -22,8 +24,10 @@ echo "INFO: _config_path: ${_config_path}"
 if [ ! "${_doit}" = "--doit" ]; then
   _doit=
 fi
+echo "INFO: _doit: ${_doit}"
+echo "INFO: _zone: ${_zone}"
 
-if ! octodns-sync --config-file="${_config_path}" ${_doit} \
+if ! octodns-sync --config-file="${_config_path}" ${_doit} ${_zone} \
 1>"${_planfile}" 2>"${_logfile}"; then
   echo "FAIL: octodns-sync exited with an error."
   echo "FAIL: Here are the contents of ${_logfile}:"
