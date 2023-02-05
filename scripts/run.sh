@@ -23,7 +23,9 @@ echo "INFO: _config_path: ${_config_path}"
 if [ ! "${_doit}" = "--doit" ]; then
   _doit=
 fi
+
 if [ "${_force}" = "Yes" ]; then
+  echo "INFO: Running octodns-sync in force-mode"
   _force="--force"
 else
   _force=
