@@ -23,7 +23,9 @@ echo "INFO: _config_path: ${_config_path}"
 if [ ! "${_doit}" = "--doit" ]; then
   _doit=
 fi
-if [ ! "${_force}" = "Yes" ]; then
+if [ "${_force}" = "Yes" ]; then
+  _force="--force"
+else
   _force=
 fi
 
