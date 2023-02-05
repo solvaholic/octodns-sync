@@ -41,6 +41,7 @@ runs:
       env:
         CONFIG_PATH: ${{ inputs.config_path }}
         DOIT: ${{ inputs.doit }}
+        FORCE: ${{ inputs.force }}
       run: ${{ github.action_path }}/scripts/run.sh
       shell: bash
       working-directory: ${{ github.workspace }}
