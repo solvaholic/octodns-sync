@@ -3,6 +3,10 @@
 name: 'octodns-sync'
 description: 'Run octodns/octodns to deploy your DNS config to any cloud.'
 inputs:
+  force:
+    description: 'Run octodns in force mode?'
+    required: true
+    default: 'No'
   add_pr_comment:
     description: 'Add plan as a comment, when triggered by a pull request?'
     required: true
