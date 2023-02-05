@@ -9,6 +9,7 @@
 
 _config_path=$CONFIG_PATH
 _doit=$DOIT
+_force=$FORCE
 
 # Run octodns-sync.
 _logfile="${GITHUB_WORKSPACE}/octodns-sync.log"
@@ -22,8 +23,11 @@ echo "INFO: _config_path: ${_config_path}"
 if [ ! "${_doit}" = "--doit" ]; then
   _doit=
 fi
+if [ ! "${_force}" = "Yes" ]; then
+  _force=
+fi
 
-if ! octodns-sync --config-file="${_config_path}" ${_doit} \
+if ! octodns-sync --config-file="${_config_path}" ${_doit} ${_force} \
 1>"${_planfile}" 2>"${_logfile}"; then
   echo "FAIL: octodns-sync exited with an error."
   echo "FAIL: Here are the contents of ${_logfile}:"
