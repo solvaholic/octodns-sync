@@ -18,7 +18,7 @@ inputs:
     required: false
     default: ''
   force:
-    description: 'Run octodns in force mode?'
+    description: 'Run octodns-sync in force mode?'
     required: false
     default: 'No'
   pr_comment_token:
