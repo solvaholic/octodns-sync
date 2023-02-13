@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - ([#93](https://github.com/solvaholic/octodns-sync/pull/93)) Add output **log** to include output from `octodns-sync` command.
+- ([#98](https://github.com/solvaholic/octodns-sync/pull/98)) Integrate octodns' force flag.
 
 ### Removed
 

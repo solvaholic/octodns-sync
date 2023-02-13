@@ -73,6 +73,12 @@ Really do it? Set "--doit" to do it; Any other string to not do it.
 
 Default `""` (empty string).
 
+### `force`
+
+Run octodns-sync in force mode? Set "Yes" to do it.
+
+Default `"No"`.
+
 ### `add_pr_comment`
 
 Add plan as a comment, when triggered by a pull request? Set "Yes" to do it.
