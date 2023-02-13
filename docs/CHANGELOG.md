@@ -17,7 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- ([#92](https://github.com/solvaholic/octodns-sync/issues/92)) `octodns-sync` may silently fail on some Actions runners
+- ([#92](https://github.com/solvaholic/octodns-sync/issues/92)) `octodns-sync` may silently fail on some Actions runners.
+- ([#94](https://github.com/solvaholic/octodns-sync/issues/94)) `set-output` is being deprecated.
+- ([#97](https://github.com/solvaholic/octodns-sync/issues/97)) `COMMENTS_URL` is not set correctly.
 
 ## [3.0.0] - 2022-06-21
 
