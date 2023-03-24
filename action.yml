@@ -8,8 +8,8 @@ inputs:
     required: true
     default: 'No'
   config_path:
-    description: 'Path, relative to your repository root, of the config file
-                  you would like octodns to use.'
+    description: 'Path, relative to your repository root or working_directory,
+                  of the config file you would like octodns to use.'
     required: true
     default: 'public.yaml'
   doit:
@@ -25,6 +25,11 @@ inputs:
     description: 'Provide a token to use, if you set add_pr_comment to Yes.'
     required: true
     default: 'Not set'
+  working_directory:
+    description: 'Path, relative to your repository root, you would like
+                  octodns to run in.'
+    required: false
+    default: ${{ github.working-directory }}
 outputs:
   log:
     description: '`octodns-sync` command output'
@@ -44,7 +49,7 @@ runs:
         FORCE: ${{ inputs.force }}
       run: ${{ github.action_path }}/scripts/run.sh
       shell: bash
-      working-directory: ${{ github.workspace }}
+      working-directory: ${{ inputs.working_directory }}
     - name: Add pull request comment
       id: comment
       env:
