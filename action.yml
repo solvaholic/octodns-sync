@@ -53,7 +53,7 @@ runs:
         COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
       run: ${{ github.action_path }}/scripts/comment.sh
       shell: bash
-      working-directory: ${{ github.workspace }}
+      working-directory: ${{ github.action_path }}
 branding:
   icon: 'list'
   color: 'purple'
