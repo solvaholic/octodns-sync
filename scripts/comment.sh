@@ -37,12 +37,8 @@ $(cat "${_planfile}")
 ${_footer}"
   # Post the comment
   # TODO: Rewrite post to use gh rather than python3
-  _user="github-actions" \
+  _url="${COMMENTS_URL}" \
+  _user="octodns-sync" \
   _token="${PR_COMMENT_TOKEN}" \
   _body="${_body}" \
-  GITHUB_EVENT_PATH="${GITHUB_EVENT_PATH}" \
-  python3 -c "import requests, os, json
-comments_url = json.load(open(os.environ['GITHUB_EVENT_PATH'], 'r'))['pull_request']['comments_url']
-response = requests.post(comments_url, auth=(os.environ['_user'], os.environ['_token']), json={'body':os.environ['_body']}, headers={'user-agent': 'octodns-sync'})
-response.raise_for_status()
-print(response)"
+  python3 "scripts/make-request.py"
