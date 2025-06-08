@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.1.1]
+
+### Fixed
+
+- ([#107](https://github.com/solvaholic/octodns-sync/pull/107)) `github.action_path` contains wrong path when used inside a container. ([actions/runner#2185](https://github.com/actions/runner/issues/2185))
+
+## [3.1.0]
 
 ### Added
 
