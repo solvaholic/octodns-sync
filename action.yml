@@ -56,7 +56,8 @@ runs:
       env:
         ADD_PR_COMMENT: ${{ inputs.add_pr_comment }}
         PR_COMMENT_TOKEN: ${{ inputs.pr_comment_token }}
-        COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        GH_REPO: ${{ github.repository }}
       run: ${GITHUB_ACTION_PATH}/scripts/comment.sh
       shell: bash
       working-directory: ${{ github.workspace }}
