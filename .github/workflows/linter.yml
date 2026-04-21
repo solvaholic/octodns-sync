@@ -1,37 +1,21 @@
 ---
 name: Lint Code Base
 
-#
-# Documentation:
-# https://help.github.com/en/articles/workflow-syntax-for-github-actions
-#
-
 on:
-  # Run on pull_request activity
   pull_request:
     types: [opened, synchronize, reopened]
-
-  # Run when manually triggered
   workflow_dispatch:
 
 jobs:
-  build:
-    # Name the Job
+  lint:
     name: Lint Code Base
-    # Set the agent to run on
-    runs-on: ubuntu-20.04
-
+    runs-on: ubuntu-latest
     steps:
-      # Checkout the code base
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      # Run yamllint to lint YAML
       - name: Lint YAML files
-        run: |
-          yamllint --no-warnings \
-          ./
+        run: yamllint --no-warnings ./
 
-      # Run shellcheck to lint shell scripts
       - name: Lint shell scripts
         run: shellcheck ./scripts/*.sh
